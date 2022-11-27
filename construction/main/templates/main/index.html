@@ -7,14 +7,35 @@
 {% block content %}
     <h1>Главная страница</h1>
     <form action="form">
-    <button class="btn"><i class="fa fa-home"></i> Создать проект</button>
+
+        <h2><button class="btn"><i class="fa fa-home"></i>
+
+            <p style="display: inline-block;
+                        padding: 8px;
+                        border: 3px solid #FCB326;
+                        border-radius: 6px;
+                        box-shadow:
+                            0 2px 1px rgba(0, 0, 0, 0.2),
+                            inset 0 2px 1px rgba(0, 0, 0, 0.2);
+                        /* Font styles */
+                        text-decoration: none;
+                        font-size: 14px;
+                        text-transform: uppercase;
+                        color: #222;
+                        border-color: #FDD68B;
+                        transform: translate(1650px,0);">
+                    <b>Создать проект</b>
+            </p> </button></h2>
+
+
     </form>
-<!--    {%for task in tasks%}-->
-<!--        <div class="alert alert-warning mt-2">-->
-<!--            <h3>{{ task.title }}</h3>-->
-<!--            <p>{{ task.task }}</p>-->
-<!--        </div>-->
-<!--    {% endfor %}-->
+    <h1><p style = "transform: translate(750px,0);"> <b> Проекты:</b> </p></h1>
+    {%for task in tasks%}
+        <div class="alert alert-warning mt-2">
+            <h3>Наименование: {{ task.title }}</h3>
+            <p>Описание: {{ task.task }}</p>
+        </div>
+    {% endfor %}
 {% endblock %}
 
 
