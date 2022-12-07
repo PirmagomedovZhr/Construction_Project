@@ -10,7 +10,7 @@ class SignUpForm(forms.Form):
         required=True,
         widget=forms.TextInput(attrs={
             'class': "form-control",
-            'id': "inputUsername",
+            'id': "Email",
             'placeholder': "Имя пользователя"
         }),
     )
@@ -18,7 +18,7 @@ class SignUpForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(attrs={
             'class': "form-control mt-2",
-            'id': "inputPassword",
+            'id': "password",
             'placeholder': "Пароль"
         }),
     )
@@ -26,7 +26,7 @@ class SignUpForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(attrs={
             'class': "form-control mt-2",
-            'id': "ReInputPassword",
+            'id': "repassword",
             'placeholder': "Повторите пароль"
         }),
     )
@@ -57,6 +57,7 @@ class SignInForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': "form-control",
             'id': "inputUsername",
+            'placeholder': "Имя пользователя"
         })
     )
     password = forms.CharField(
@@ -64,6 +65,7 @@ class SignInForm(forms.Form):
         widget=forms.PasswordInput(attrs={
             'class': "form-control mt-2",
             'id': "inputPassword",
+            'placeholder': "Пароль"
         })
-    )
 
+    )

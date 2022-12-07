@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from .models import Task
-from .forms import SignInForm, SignUpForm
+from .forms import SignUpForm, SignInForm
 
 
 
@@ -22,9 +22,8 @@ class SignUpView(View):
         if form.is_valid():
             user = form.save()
             if user is not None:
-                login(request, user)
-                return HttpResponseRedirect('signin')
-        return render(request, 'main/signin.html', context={
+                return HttpResponseRedirect('/')
+        return render(request, 'main/signup.html', context={
             'form': form,
         })
 
@@ -47,7 +46,6 @@ class SignInView(View):
         return render(request, 'main/signin.html', context={
             'form': form,
         })
-
 
 def index(request):
     tasks = Task.objects.all()
