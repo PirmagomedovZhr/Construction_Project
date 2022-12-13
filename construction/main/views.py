@@ -7,6 +7,7 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from .models import Task
 from .forms import SignUpForm, SignInForm
+from django.contrib.auth import logout
 
 
 
@@ -48,8 +49,12 @@ class SignInView(View):
         })
 
 def index(request):
-    tasks = Task.objects.all()
-    return render(request, 'main/index.html',{'tasks':tasks})
+    form = SignInForm(request.POST)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        tasks = Task.objects.all()
+        return render(request, 'main/index.html',{'tasks':tasks})
 
 def about(request):
     return render(request, 'main/about.html')
@@ -58,13 +63,17 @@ def about(request):
 
 def form(request):
     if request.method == 'POST':
+        nomer = len(Task.objects.all())+1
         lname = request.POST.get('lname')
         fname = request.POST.get('fname')
-        print(lname, fname)
-        Task.objects.create(title=lname, task=fname)
-        return redirect('/')
+        if len(lname)>4 or len(fname)>4:
+            Task.objects.create(title=lname, task=fname, nomer=nomer)
+            return redirect('/')
     print(request.method)
     return render(request, 'main/form.html')
 
+def logout_user(request):
+    logout(request)
+    return redirect('signin')
 
 
