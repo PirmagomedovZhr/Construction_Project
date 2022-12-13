@@ -1,14 +1,46 @@
-{% extends 'main/base.html' %}
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/base.css' %}" />
+    <title>Я главный</title>
+</head>
+<body>
+<div id="sitebar">
+    <ul>
+        <li class="last">{{user.username}}</li>
+    <li><a href="/">Пользователи</a></li>
+    <li><a href="/">Проекты</a></li>
+    <li><a href="{% url 'logout' %}">Выйти</a></li>
+        </ul>
+    <table>
+  <thead>
+    <tr>
+      <td>№</td>
+      <th>Наименование</th>
+      <th>Описание</th>
+    </tr>
+  </thead>
 
-{% block title %}
-Страница про нас
-{% endblock %}
+  <tbody>
+    {%for task in tasks%}
+    <tr>
+      <td>{{ task.nomer }}</td>
+      <th>{{ task.title }}</th>
+      <th>{{ task.task }}</th>
+    </tr>
+  {% endfor %}
+  </tbody>
 
-{% block content %}
-<h1>Страница про нас</h1>
-{% endblock %}
+</table>
 
 
+<a href="{% url 'form' %}" class="glow-button">Создать проект</a>
 
-
-
+</div>
+</body>
+</html>

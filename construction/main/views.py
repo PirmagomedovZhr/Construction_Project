@@ -49,12 +49,17 @@ class SignInView(View):
         })
 
 def index(request):
+    template = ''
     form = SignInForm(request.POST)
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/signin')
     else:
+        if request.user.is_superuser:
+            template = 'main/about.html'
+        else:
+            template = 'main/base.html'
         tasks = Task.objects.all()
-        return render(request, 'main/index.html',{'tasks':tasks})
+        return render(request, template, {'tasks':tasks})
 
 def about(request):
     return render(request, 'main/about.html')
@@ -62,15 +67,22 @@ def about(request):
 
 
 def form(request):
-    if request.method == 'POST':
-        nomer = len(Task.objects.all())+1
-        lname = request.POST.get('lname')
-        fname = request.POST.get('fname')
-        if len(lname)>4 or len(fname)>4:
-            Task.objects.create(title=lname, task=fname, nomer=nomer)
-            return redirect('/')
-    print(request.method)
-    return render(request, 'main/form.html')
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            nomer = len(Task.objects.all())+1
+            lname = request.POST.get('lname')
+            fname = request.POST.get('fname')
+            if len(lname) > 4 or len(fname) > 4:
+                Task.objects.create(title=lname, task=fname, nomer=nomer)
+                return redirect('/')
+        print(request.method)
+        return render(request, 'main/form.html')
+    elif request.user.is_authenticated:
+        tasks = Task.objects.all()
+        return render(request, 'main/base.html', {'tasks': tasks})
+    else:
+        return HttpResponseRedirect('/signin')
+
 
 def logout_user(request):
     logout(request)
