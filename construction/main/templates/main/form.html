@@ -9,27 +9,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/base.css' %}" />
 </head>
 <body>
-<div id="sitebar">
-    <ul>
-        <li class="last">{{user.username}}</li>
-    <li><a href="/">Пользователи</a></li>
-    <li><a href="/">Проекты</a></li>
-    <li><a href="{% url 'logout' %}">Выйти</a></li>
-        </ul>
-
+<div id="regsave">
+    <div id="formcontrol">
 <form method="POST" >{% csrf_token %}
-  <p style = "transform: translate(820px,10px);">
-    <label for="fname">Наименование</label><br></p>
-  <p style = "transform: translate(750px,0);">
-    <input type="text" id="fname" name="fname" value=""><br></p>
-  <p style = "transform: translate(840px,0px);">
-    <label for="lname">Описание</label><br></p>
-  <p style = "transform: translate(750px,-10px);">
-    <input type="text" id="lname" name="lname" value=""><br><br></p>
-  <p style = "transform: translate(840px,-25px);">
-    <input type="submit" value="Создать"></p>
-</form>
 
+
+    <label for="lname"></label><input type="text" id="fname" name="lname" value="" placeholder="Наименование"><br>
+
+
+    <label for="fname"></label><input type="text" id="lname" name="fname" value="" placeholder="Описание"><br><br>
+
+    <input type="submit" value="Создать" id="but">
+</form>
+    </div>
 </div>
 </body>
 </html>

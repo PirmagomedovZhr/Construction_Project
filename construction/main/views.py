@@ -69,11 +69,11 @@ def about(request):
 def form(request):
     if request.user.is_superuser:
         if request.method == 'POST':
-            nomer = len(Task.objects.all())+1
             lname = request.POST.get('lname')
             fname = request.POST.get('fname')
+
             if len(lname) > 4 or len(fname) > 4:
-                Task.objects.create(title=lname, task=fname, nomer=nomer)
+                Task.objects.create(title=lname, task=fname)
                 return redirect('/')
         print(request.method)
         return render(request, 'main/form.html')
