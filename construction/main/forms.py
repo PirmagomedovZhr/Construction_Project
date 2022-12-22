@@ -30,6 +30,22 @@ class SignUpForm(forms.Form):
             'placeholder': "Повторите пароль"
         }),
     )
+    first_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': "form-control mt-2",
+            'id': "first_name",
+            'placeholder': "Имя"
+        }),
+    )
+    last_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': "form-control mt-2",
+            'id': "last_name",
+            'placeholder': "Фамилия"
+        }),
+    )
 
     def clean(self):
         password = self.cleaned_data['password']
@@ -44,6 +60,8 @@ class SignUpForm(forms.Form):
         user = User.objects.create_user(
             username=self.cleaned_data['username'],
             password=self.cleaned_data['password'],
+            first_name=self.cleaned_data['first_name'],
+            last_name=self.cleaned_data['last_name'],
         )
         user.save()
         auth = authenticate(**self.cleaned_data)

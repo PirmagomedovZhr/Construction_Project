@@ -33,14 +33,18 @@
             {% csrf_token %}
             <h1 class="text-center">Регистрация</h1>
                     {{ form.username }} <br>
+                    {{ form.first_name}} <br>
+                    {{ form.last_name}} <br>
                     {{ form.password }} <br>
                     {{ form.repeat_password }}  <br>
+
                             <div class="form-group">
                                 <button class="btn btn-primary btn-block create-account" type="submit">Продолжить</button>
                             </div>
                             <div class="container signin" id="sign-in">
                                 <p>У вас уже есть аккаунт? <br><a href="{% url 'signin' %}" id="sign-im">Войти</a></p>
                             </div>
+
         </form>
 </div>
 </body>

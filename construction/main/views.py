@@ -8,6 +8,9 @@ from django.http import HttpResponseRedirect
 from .models import Task
 from .forms import SignUpForm, SignInForm
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
+
+
 
 
 
@@ -22,6 +25,8 @@ class SignUpView(View):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
+            print(form)
+            print(user)
             if user is not None:
                 return HttpResponseRedirect('/')
         return render(request, 'main/signup.html', context={
@@ -60,6 +65,20 @@ def index(request):
             template = 'main/base.html'
         tasks = Task.objects.all()
         return render(request, template, {'tasks':tasks})
+
+def get_user(request):
+    template = ''
+    form = SignInForm(request.POST)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        if request.user.is_superuser:
+            template = 'main/users.html'
+        else:
+            template = '/'
+        users_list = User.objects.all()
+        return render(request, template, {"users_list": users_list},)
+
 
 def about(request):
     return render(request, 'main/about.html')
