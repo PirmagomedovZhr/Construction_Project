@@ -1,0 +1,47 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/base.css' %}" />
+    <title>Страница администратора</title>
+</head>
+<body>
+<div id="sitebar">
+    <ul>
+        <li class="last">{{user.first_name}} {{user.last_name}} {{user.username}}</li>
+    <li><a href="/users">Пользователи</a></li>
+    <li><a href="/main/static">Проекты</a></li>
+    <li><a href="{% url 'logout' %}">Выйти</a></li>
+        </ul>
+    <div class="ooo">
+    <table>
+  <thead>
+    <tr>
+      <td>№</td>
+      <th>Наименование</th>
+      <th>Описание</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {%for task in tasks%}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <th>{{ task.title }}</th>
+      <th>{{ task.task }}</th>
+    </tr>
+  {% endfor %}
+  </tbody>
+
+</table>
+</div>
+
+<a href="{% url 'form' %}" class="glow-button">Создать проект</a>
+
+</div>
+</body>
+</html>
