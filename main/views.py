@@ -12,8 +12,13 @@ from django.contrib.auth.models import User
 
 
 
+def inactive_users(request):
+    # Получение всех неактивных пользователей
+    inactive_users = User.objects.filter(is_active=False)
 
-
+    # Передача списка неактивных пользователей в шаблон
+    context = {'inactive_users': inactive_users}
+    return render(request, 'main/inactive_users.html', context)
 
 class SignUpView(View):
     def get(self, request, *args, **kwargs):
