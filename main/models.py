@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Character(models.TextChoices):
     designer = 'Дизайнер'
     architector = 'Архитектор'
@@ -29,3 +28,4 @@ class Doljn(models.Model):
         choices=YEAR_IN_SCHOOL_CHOICES,
         default=FRESHMAN,
     )
+

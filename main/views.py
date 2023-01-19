@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 
 
 
+
 class SignUpView(View):
     def get(self, request, *args, **kwargs):
         form = SignUpForm()
@@ -25,8 +26,10 @@ class SignUpView(View):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
+            user.is_active = False
+            user.save()
             print(form)
-            print(user)
+            print(user.is_active)
             if user is not None:
                 return HttpResponseRedirect('/')
         return render(request, 'main/signup.html', context={
@@ -52,6 +55,8 @@ class SignInView(View):
         return render(request, 'main/signin.html', context={
             'form': form,
         })
+
+
 
 def index(request):
     template = ''
