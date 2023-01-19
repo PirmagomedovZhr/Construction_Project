@@ -10,7 +10,11 @@ from .forms import SignUpForm, SignInForm
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 
-
+def activate_user(request, user_id):
+    user = User.objects.get(pk=user_id)
+    user.is_active = True
+    user.save()
+    return redirect('active')
 
 def inactive_users(request):
     # Получение всех неактивных пользователей
@@ -86,7 +90,7 @@ def get_user(request):
             template = 'main/users.html'
         else:
             template = '/'
-        users_list = User.objects.all()
+        users_list = User.objects.all().is_active
         return render(request, template, {"users_list": users_list},)
 
 

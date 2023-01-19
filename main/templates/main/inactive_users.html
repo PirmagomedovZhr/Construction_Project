@@ -25,7 +25,7 @@
     <tr>
       <td>№</td>
       <th>Фамилия</th>
-      <th>Имя</th>
+      <th>Activate</th>
     </tr>
   </thead>
 
@@ -34,7 +34,10 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <th>{{ user.first_name }}</th>
-      <th>{{ user.last_name }}</th>
+      <th><form action="{% url 'activate_user' user.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Activate">
+                    </form></th>
     </tr>
   {% endfor %}
   </tbody>
