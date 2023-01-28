@@ -17,14 +17,10 @@ from django.views import View
 from .models import User, Profile
 
 
-class UsersView(View):
-    def get(self, request, *args, **kwargs):
-        users = User.objects.all()
-        positions = Profile.objects.all()
-        print(positions)
-        print(users)
-        return render(request, 'main/register.html', context={'users': users, 'positions': positions})
 
+def UsersView(request):
+    users = Profile.objects.all()
+    return render(request, 'main/register.html', {'users': users})
 
 def activate_user(request, user_id):
     user = User.objects.get(pk=user_id)
