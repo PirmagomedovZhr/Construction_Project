@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Task, UserProfile
+from .models import Task, Profile, UserProfile
 
 admin.site.register(Task)
-# Register your models here.
+admin.site.register(Profile)
 admin.site.register(UserProfile)
+

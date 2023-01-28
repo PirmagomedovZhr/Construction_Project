@@ -1,14 +1,30 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+
+from django.shortcuts import render, redirect
 from django.views import View
-from django.core.paginator import Paginator
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
-from .models import Task
-from .forms import SignUpForm, SignInForm
+from .models import Task, Profile
+from .forms import SignUpForm, SignInForm, ProfileForm
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+
+from django.shortcuts import render
+from django.views import View
+from .models import User, Profile
+
+
+class UsersView(View):
+    def get(self, request, *args, **kwargs):
+        users = User.objects.all()
+        positions = Profile.objects.all()
+        print(positions)
+        print(users)
+        return render(request, 'main/register.html', context={'users': users, 'positions': positions})
+
 
 def activate_user(request, user_id):
     user = User.objects.get(pk=user_id)
@@ -31,14 +47,16 @@ class SignUpView(View):
             'form': form,
         })
 
+
     def post(self, request, *args, **kwargs):
+        profile_form = ProfileForm(request.POST)
         form = SignUpForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and profile_form.is_valid():
             user = form.save()
             user.is_active = False
             user.save()
-            print(form)
-            print(user.is_active)
+            profile = Profile.objects.create(user=user, position=profile_form.cleaned_data['position'])
+            profile.save()
             if user is not None:
                 return HttpResponseRedirect('/')
         return render(request, 'main/signup.html', context={

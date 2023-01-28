@@ -4,6 +4,23 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .models import UserProfile
 
+from django import forms
+from django.contrib.auth.models import User
+from .models import Profile
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['position']
+
+
 class PositionAuthenticationForm(AuthenticationForm):
     position = forms.CharField(max_length=20, widget=forms.Select(choices=UserProfile.POSITION_CHOICES))
 
@@ -22,6 +39,17 @@ class SignUpForm(forms.Form):
             'class': "form-control",
             'id': "Email",
             'placeholder': "Имя пользователя"
+        }),
+    )
+    position = forms.ChoiceField(
+        choices=[
+            ('architect', 'Архитектор'),
+            ('constructor', 'Конструктор'),
+            ('designer', 'Дизайнер')
+        ],
+        widget=forms.Select(attrs={
+            'class': "form-control mt-2",
+            'id':'position'
         }),
     )
     password = forms.CharField(
