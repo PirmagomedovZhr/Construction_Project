@@ -90,7 +90,7 @@ def get_user(request):
             template = 'main/users.html'
         else:
             template = '/'
-        users_list = User.objects.all().is_active
+        users_list = User.objects.filter(is_active=True)
         return render(request, template, {"users_list": users_list},)
 
 

@@ -1,7 +1,17 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from .models import UserProfile
 
+class PositionAuthenticationForm(AuthenticationForm):
+    position = forms.CharField(max_length=20, widget=forms.Select(choices=UserProfile.POSITION_CHOICES))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password'].widget.attrs.update({'class': 'form-control'})
+        self.fields['position'].widget.attrs.update({'class': 'form-control'})
 
 
 class SignUpForm(forms.Form):

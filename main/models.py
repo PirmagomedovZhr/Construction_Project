@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Character(models.TextChoices):
     designer = 'Дизайнер'
@@ -13,19 +15,7 @@ class Task(models.Model):
         return self.title
 
 
-class Doljn(models.Model):
-
-    FRESHMAN = 'AR'
-    SOPHOMORE = 'KS'
-    JUNIOR = 'DZ'
-    YEAR_IN_SCHOOL_CHOICES = [
-        (FRESHMAN, 'Архитектор'),
-        (SOPHOMORE, 'Конструктор'),
-        (JUNIOR, 'Дизайнер'),
-    ]
-    year_in_school = models.CharField(
-        max_length=255,
-        choices=YEAR_IN_SCHOOL_CHOICES,
-        default=FRESHMAN,
-    )
-
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    POSITION_CHOICES = [('architect', 'архитектор'), ('designer', 'дизайнер'), ('constructor', 'конструктор')]
+    position = models.CharField(max_length=20, choices=POSITION_CHOICES)
