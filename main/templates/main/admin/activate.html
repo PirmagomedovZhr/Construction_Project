@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 {% load static %}
 <html lang="en">
@@ -7,7 +9,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/base.css' %}" />
-    <title>Страница пользователя</title>
+    <title>Страница администратора</title>
 </head>
 <body>
 <div id="sitebar">
@@ -22,24 +24,27 @@
   <thead>
     <tr>
       <td>№</td>
-      <th>Наименование</th>
-      <th>Описание</th>
+      <th>Фамилия</th>
+      <th>Activate</th>
     </tr>
   </thead>
 
   <tbody>
-    {%for task in tasks%}
+    {% for user in inactive_users %}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <th>{{ task.title }}</th>
-      <th>{{ task.task }}</th>
+      <th>{{ user.first_name }}</th>
+      <th><form action="{% url 'activate_user' user.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Activate">
+                    </form></th>
     </tr>
   {% endfor %}
   </tbody>
 
 </table>
 </div>
-
 </div>
 </body>
 </html>
+

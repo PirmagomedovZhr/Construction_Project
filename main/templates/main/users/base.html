@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 {% load static %}
 <html lang="en">
@@ -9,14 +7,12 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/base.css' %}" />
-    <title>Страница администратора</title>
+    <title>Страница пользователя</title>
 </head>
 <body>
 <div id="sitebar">
     <ul>
         <li class="last">{{user.first_name}} {{user.last_name}} {{user.username}}</li>
-    <li><a href="/users">Пользователи</a></li>
-    <li><a href="/main/static">Проекты</a></li>
     <li><a href="{% url 'logout' %}">Выйти</a></li>
         </ul>
     <div class="ooo">
@@ -24,20 +20,17 @@
   <thead>
     <tr>
       <td>№</td>
-      <th>Фамилия</th>
-      <th>Activate</th>
+      <th>Наименование</th>
+      <th>Описание</th>
     </tr>
   </thead>
 
   <tbody>
-    {% for user in inactive_users %}
+    {%for task in tasks%}
     <tr>
       <td>{{ forloop.counter }}</td>
-      <th>{{ user.first_name }}</th>
-      <th><form action="{% url 'activate_user' user.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value="Activate">
-                    </form></th>
+      <th>{{ task.title }}</th>
+      <th>{{ task.task }}</th>
     </tr>
   {% endfor %}
   </tbody>
@@ -45,9 +38,6 @@
 </table>
 </div>
 
-<a href="{% url 'form' %}" class="glow-button">Создать проект</a>
-
 </div>
 </body>
 </html>
-

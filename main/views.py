@@ -1,40 +1,54 @@
-
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
-from .models import Task, Profile
+from .models import Task
 from .forms import SignUpForm, SignInForm, ProfileForm
 from django.contrib.auth import logout
-from django.contrib.auth.models import User
-
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
-
 from django.shortcuts import render
 from django.views import View
 from .models import User, Profile
 
 
 
-def UsersView(request):
-    users = Profile.objects.all()
-    return render(request, 'main/register.html', {'users': users})
+def Get_User_Position(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        if request.user.is_superuser:
+            users = Profile.objects.all()
+            return render(request, 'main/admin/users.html', {'users': users})
+        else:
+            tasks = Task.objects.all()
+            return render(request, 'main/users/base.html', {'tasks': tasks})
+
 
 def activate_user(request, user_id):
-    user = User.objects.get(pk=user_id)
-    user.is_active = True
-    user.save()
-    return redirect('active')
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        if request.user.is_superuser:
+            user = User.objects.get(pk=user_id)
+            user.is_active = True
+            user.save()
+            return redirect('activate')
+        else:
+            tasks = Task.objects.all()
+            return render(request, 'main/users/base.html', {'tasks': tasks})
+
 
 def inactive_users(request):
-    # Получение всех неактивных пользователей
-    inactive_users = User.objects.filter(is_active=False)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        if request.user.is_superuser:
+            inactive_users = User.objects.filter(is_active=False)
+            context = {'inactive_users': inactive_users}
+            return render(request, 'main/admin/activate.html', context)
+        else:
+            tasks = Task.objects.all()
+            return render(request, 'main/users/base.html', {'tasks': tasks})
 
-    # Передача списка неактивных пользователей в шаблон
-    context = {'inactive_users': inactive_users}
-    return render(request, 'main/inactive_users.html', context)
+
 
 class SignUpView(View):
     def get(self, request, *args, **kwargs):
@@ -59,6 +73,7 @@ class SignUpView(View):
             'form': form,
         })
 
+
 class SignInView(View):
     def get(self, request, *args, **kwargs):
         form = SignInForm()
@@ -81,36 +96,16 @@ class SignInView(View):
 
 
 
-def index(request):
-    template = ''
-    form = SignInForm(request.POST)
+def base(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/signin')
     else:
         if request.user.is_superuser:
-            template = 'main/about.html'
+            template = 'main/admin/base.html'
         else:
-            template = 'main/base.html'
+            template = 'main/users/base.html'
         tasks = Task.objects.all()
         return render(request, template, {'tasks':tasks})
-
-def get_user(request):
-    template = ''
-    form = SignInForm(request.POST)
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect('/signin')
-    else:
-        if request.user.is_superuser:
-            template = 'main/users.html'
-        else:
-            template = '/'
-        users_list = User.objects.filter(is_active=True)
-        return render(request, template, {"users_list": users_list},)
-
-
-def about(request):
-    return render(request, 'main/about.html')
-
 
 
 def form(request):
@@ -126,7 +121,7 @@ def form(request):
         return render(request, 'main/form.html')
     elif request.user.is_authenticated:
         tasks = Task.objects.all()
-        return render(request, 'main/base.html', {'tasks': tasks})
+        return render(request, 'main/users/base.html', {'tasks': tasks})
     else:
         return HttpResponseRedirect('/signin')
 

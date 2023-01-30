@@ -12,15 +12,12 @@ class UserProfile(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     position = models.CharField(max_length=20, choices=[
-            ('architect', 'Архитектор'),
-            ('constructor', 'Конструктор'),
-            ('designer', 'Дизайнер')
+            ('Архитектор', 'architect'),
+            ('Конструктор', 'constructor'),
+            ('Дизайнер', 'designer')
         ])
     def __str__(self):
         return self.position
-class Character(models.TextChoices):
-    designer = 'Дизайнер'
-    architector = 'Архитектор'
 
 
 class Task(models.Model):
