@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from .models import Task
-from .forms import SignUpForm, SignInForm, ProfileForm
+from .forms import SignUpForm, SignInForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
@@ -59,17 +59,10 @@ class SignUpView(View):
 
 
     def post(self, request, *args, **kwargs):
-        profile_form = ProfileForm(request.POST)
         form = SignUpForm(request.POST)
-        if form.is_valid() and profile_form.is_valid():
-            user = form.save()
-
-            user.is_active = False
-            user.save()
-            profile = Profile.objects.create(user=user, position=profile_form.cleaned_data['position'])
-            profile.save()
-            if user is not None:
-                return HttpResponseRedirect('/')
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
         return render(request, 'main/signup.html', context={
             'form': form,
         })

@@ -13,12 +13,6 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password']
 
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['position']
-
-
 class PositionAuthenticationForm(AuthenticationForm):
     position = forms.CharField(max_length=20, widget=forms.Select(choices=UserProfile.POSITION_CHOICES))
 
@@ -92,17 +86,20 @@ class SignUpForm(forms.Form):
                 "Пароли не совпадают"
             )
 
-
     def save(self):
         user = User.objects.create_user(
             username=self.cleaned_data['username'],
             password=self.cleaned_data['password'],
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
+            is_active=False
         )
-        user.save()
-        auth = authenticate(**self.cleaned_data)
-        return auth
+        position = self.cleaned_data["position"]
+        user = Profile.objects.create(
+            user=user,
+            position=position
+        )
+        return user
 
 
 class SignInForm(forms.Form):
