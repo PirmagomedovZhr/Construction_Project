@@ -1,9 +1,7 @@
-from django import forms
-from django.contrib.auth.models import User
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .models import UserProfile
-
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
@@ -93,6 +91,7 @@ class SignUpForm(forms.Form):
             raise forms.ValidationError(
                 "Пароли не совпадают"
             )
+
 
     def save(self):
         user = User.objects.create_user(

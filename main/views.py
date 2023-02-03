@@ -63,6 +63,7 @@ class SignUpView(View):
         form = SignUpForm(request.POST)
         if form.is_valid() and profile_form.is_valid():
             user = form.save()
+
             user.is_active = False
             user.save()
             profile = Profile.objects.create(user=user, position=profile_form.cleaned_data['position'])
