@@ -1,7 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.contrib.auth.models import User, AbstractUser
+
+
+
+class CustomUser(AbstractUser):
+    positions = (
+        ('architect', 'архитектор'),
+        ('construction', 'конструктор'),
+        ('designer', 'дизайнер')
+    )
+
+    position = models.CharField('Должность', max_length=12, choices=positions, default='')
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
