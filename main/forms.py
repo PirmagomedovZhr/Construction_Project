@@ -1,10 +1,8 @@
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from .models import UserProfile
 from django import forms
-from django.contrib.auth.models import User
-from .models import Profile
+from .models import User
 
 
 class UserForm(forms.ModelForm):
@@ -13,14 +11,14 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password']
 
 
-class PositionAuthenticationForm(AuthenticationForm):
-    position = forms.CharField(max_length=20, widget=forms.Select(choices=UserProfile.POSITION_CHOICES))
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class': 'form-control'})
-        self.fields['password'].widget.attrs.update({'class': 'form-control'})
-        self.fields['position'].widget.attrs.update({'class': 'form-control'})
+# class PositionAuthenticationForm(AuthenticationForm):
+#     position = forms.CharField(max_length=20, widget=forms.Select(choices=UserProfile.POSITION_CHOICES))
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['username'].widget.attrs.update({'class': 'form-control'})
+#         self.fields['password'].widget.attrs.update({'class': 'form-control'})
+#         self.fields['position'].widget.attrs.update({'class': 'form-control'})
 
 
 class SignUpForm(forms.Form):
@@ -92,12 +90,8 @@ class SignUpForm(forms.Form):
             password=self.cleaned_data['password'],
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
-            is_active=False
-        )
-        position = self.cleaned_data["position"]
-        user = Profile.objects.create(
-            user=user,
-            position=position
+            is_active=False,
+            positions=self.cleaned_data["position"]
         )
         return user
 

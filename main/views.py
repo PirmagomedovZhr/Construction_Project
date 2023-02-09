@@ -6,8 +6,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render
 from django.views import View
-from .models import User, Profile
-
+from .models import User
 
 
 def Get_User_Position(request):
@@ -15,8 +14,7 @@ def Get_User_Position(request):
         return HttpResponseRedirect('/signin')
     else:
         if request.user.is_superuser:
-            users = Profile.objects.all()
-            return render(request, 'main/admin/users.html', {'users': users})
+            return render(request, 'main/admin/users.html', {'users': User.objects.all()})
         else:
             tasks = Task.objects.all()
             return render(request, 'main/users/base.html', {'tasks': tasks})

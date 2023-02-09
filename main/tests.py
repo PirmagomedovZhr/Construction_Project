@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from .forms import SignInForm
-from django.contrib.auth.models import User
+from .models import User
 
 
 class SignInViewTestCase(TestCase):
