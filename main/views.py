@@ -9,12 +9,12 @@ from django.views import View
 from .models import User
 
 
-def Get_User_Position(request):
+def Get_User(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/signin')
     else:
         if request.user.is_superuser:
-            return render(request, 'main/admin/users.html', {'users': User.objects.all()})
+            return render(request, 'main/admin/users.html', {'users': User.objects.filter(is_active=True)})
         else:
             tasks = Task.objects.all()
             return render(request, 'main/users/base.html', {'tasks': tasks})
@@ -50,9 +50,13 @@ def inactive_users(request):
 
 class SignUpView(View):
     def get(self, request, *args, **kwargs):
-        form = SignUpForm()
-        return render(request, 'main/signup.html', context={
-            'form': form,
+        if request.user.is_authenticated:
+            tasks = Task.objects.all()
+            return render(request, 'main/users/base.html', {'tasks': tasks})
+        else:
+            form = SignUpForm()
+            return render(request, 'main/signup.html', context={
+                'form': form,
         })
 
 
@@ -68,9 +72,13 @@ class SignUpView(View):
 
 class SignInView(View):
     def get(self, request, *args, **kwargs):
-        form = SignInForm()
-        return render(request, 'main/signin.html', context={
-            'form': form,
+        if request.user.is_authenticated:
+            tasks = Task.objects.all()
+            return render(request, 'main/users/base.html', {'tasks': tasks})
+        else:
+            form = SignInForm()
+            return render(request, 'main/signin.html', context={
+                'form': form,
         })
 
     def post(self, request, *args, **kwargs):

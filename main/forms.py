@@ -1,24 +1,5 @@
-
-from django.contrib.auth import authenticate
-from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from .models import User
-
-
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password']
-
-
-# class PositionAuthenticationForm(AuthenticationForm):
-#     position = forms.CharField(max_length=20, widget=forms.Select(choices=UserProfile.POSITION_CHOICES))
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.fields['username'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['password'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['position'].widget.attrs.update({'class': 'form-control'})
 
 
 class SignUpForm(forms.Form):
@@ -91,7 +72,7 @@ class SignUpForm(forms.Form):
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
             is_active=False,
-            positions=self.cleaned_data["position"]
+            position=self.cleaned_data["position"]
         )
         return user
 

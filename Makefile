@@ -14,3 +14,6 @@ makemigrations:
 migrate:
 	docker-compose run --rm web sh -c "python manage.py migrate"
 
+createsuperuser:
+	docker-compose run --rm web sh -c "python manage.py createsuperuser"
+
