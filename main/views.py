@@ -6,7 +6,71 @@ from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render
 from django.views import View
-from .models import User
+from .models import User, ProjectUser
+
+
+def add_user_to_project(project, user):
+    project_user = ProjectUser(project=project, user=user)
+    project_user.save()
+
+def remove_user_from_project(project, user):
+    project_user = ProjectUser.objects.get(project=project, user=user)
+    project_user.delete()
+
+def clear_project_users(project):
+    ProjectUser.objects.filter(project=project).delete()
+
+
+
+def get_users_by_position(position):
+    return User.objects.filter(position=position)
+
+
+
+
+
+
+def lindex(request):
+    users = User.objects.all()
+    data = []
+    for user in users:
+        projects = ProjectUser.objects.filter(user=user).values_list('project__title', flat=True)
+        position = user.get_position_display()
+        data.append({'user': user.username, 'position': position, 'projects': ', '.join(projects)})
+    return render(request, 'main/lll.html', {'data': data})
+
+
+
+def kkk(request):
+    users = User.objects.all()
+    tasks = Task.objects.all()
+
+    if request.method == 'POST':
+        user_id = request.POST.get('user')
+        task_id = request.POST.get('task')
+        user = User.objects.get(id=user_id)
+        task = Task.objects.get(id=task_id)
+        ProjectUser.objects.create(user=user, project=task)
+        return redirect('kkk')
+
+    return render(request, 'main/kkk.html', {'users': users, 'tasks': tasks})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def Get_User(request):

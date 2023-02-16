@@ -1,0 +1,18 @@
+<table>
+  <thead>
+    <tr>
+      <th>Пользователь</th>
+      <th>Должность</th>
+      <th>Проекты</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in data %}
+      <tr>
+        <td>{{ item.user }}</td>
+        <td>{{ item.position }}</td>
+        <td>{{ item.projects }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
