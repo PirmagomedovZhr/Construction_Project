@@ -57,6 +57,29 @@ def kkk(request):
 
 
 
+def jjj(request):
+    # получаем всех пользователей и проекты
+    users = User.objects.all()
+    projects = Task.objects.all()
+
+    # обрабатываем отправленную форму
+    if request.method == 'POST':
+        user_id = request.POST.get('user')
+        project_id = request.POST.get('project')
+
+        # ищем запись ProjectUser по выбранным user_id и project_id
+        project_user = ProjectUser.objects.filter(user=user_id, project=project_id).first()
+
+        # если такая запись есть, удаляем ее
+        if project_user:
+            project_user.delete()
+            return redirect('jjj')
+
+    # если запрос GET, просто отображаем шаблон
+    return render(request, 'main/jjj.html', {'users': users, 'projects': projects})
+
+
+
 
 
 
