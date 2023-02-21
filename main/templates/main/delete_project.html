@@ -1,4 +1,8 @@
 
+
+
+
+
 <!DOCTYPE html>
 {% load static %}
 <html >
@@ -19,7 +23,7 @@
     {% for project in projects %}
         <li>
             {{ project.project.title }}
-            <form action="{% url 'delete_project' project.id %}" method="post">
+            <form action="{% url 'delete_project' project.project.id %}" method="post">
                 {% csrf_token %}
                 <button type="submit">Delete</button>
             </form>
@@ -28,7 +32,6 @@
         <li>No projects found</li>
     {% endfor %}
 </ul>
-
 
 </body>
 </html>

@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from .models import Project
 from .forms import SignUpForm, SignInForm
@@ -90,12 +91,19 @@ def user_list(request):
     return render(request, 'main/user_list.html', {'users': users})
 
 
-
 def user_projects(request, user_id):
     user = User.objects.get(id=user_id)
-    projects = ProjectUser.objects.filter(user=user).values_list('project__title', flat=True)
+    projects = ProjectUser.objects.filter(user=user)
     position = user.get_position_display()
     return render(request, 'main/user_projects.html', {'user': user, 'position': position, 'projects': projects})
+
+def delete_project(request, project_id):
+    project = ProjectUser.objects.get(id=project_id)
+    if request.method == 'POST':
+        project.delete()
+        messages.success(request, 'Project has been deleted')
+        return redirect('user_projects', user_id=project.user.id)
+    return redirect('user_projects', user_id=project.user.id)
 
 
 
