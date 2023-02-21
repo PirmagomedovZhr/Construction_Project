@@ -14,20 +14,37 @@
 
 <body>
 <h2>{{ user.username }}</h2>
-<p>{{ position }}</p>
-<ul>
+  <p>{{ position }}</p>
+
+  <!-- Форма для добавления проекта -->
+  <form method="post">
+    {% csrf_token %}
+    <label for="project-select">Select a project:</label>
+    <select id="project-select" name="project">
+      {% for project in available_projects %}
+        <option value="{{ project.id }}">{{ project.title }}</option>
+      {% endfor %}
+    </select>
+    <label for="user-select">Select a user:</label>
+    <select id="user-select" name="user">
+      <option value="{{ user.id }}" selected>{{ user.username }}</option>
+    </select>
+    <button type="submit">Assign project</button>
+  </form>
+
+  <ul>
     {% for project in projects %}
-        <li>
-            {{ project.project.title }}
-            <form action="{% url 'delete_project' project.id %}" method="post">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-            </form>
-        </li>
+      <li>
+        {{ project.project.title }}
+        <form action="{% url 'delete_project' project.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+        </form>
+      </li>
     {% empty %}
-        <li>No projects found</li>
+      <li>No projects found</li>
     {% endfor %}
-</ul>
+  </ul>
 
 
 </body>

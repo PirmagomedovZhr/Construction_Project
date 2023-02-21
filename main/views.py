@@ -95,7 +95,22 @@ def user_projects(request, user_id):
     user = User.objects.get(id=user_id)
     projects = ProjectUser.objects.filter(user=user)
     position = user.get_position_display()
-    return render(request, 'main/user_projects.html', {'user': user, 'position': position, 'projects': projects})
+    available_projects = Project.objects.all()
+
+    if request.method == 'POST':
+        project_id = request.POST.get('project')
+        user_id = request.POST.get('user')
+        user = User.objects.get(id=user_id)
+        project = Project.objects.get(id=project_id)
+        ProjectUser.objects.create(user=user, project=project)
+        messages.success(request, 'Project has been assigned')
+
+    return render(request, 'main/user_projects.html', {
+        'user': user,
+        'position': position,
+        'projects': projects,
+        'available_projects': available_projects
+    })
 
 def delete_project(request, project_id):
     project = ProjectUser.objects.get(id=project_id)
