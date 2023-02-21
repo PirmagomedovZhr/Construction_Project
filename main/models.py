@@ -12,7 +12,7 @@ class User(AbstractUser):
     position = models.CharField('Должность', max_length=12, choices=positions, default='')
 
 
-class Task(models.Model):
+class Project(models.Model):
     title = models.CharField('Название', max_length=50)
     task = models.TextField('Описание')
 
@@ -21,5 +21,5 @@ class Task(models.Model):
 
 
 class ProjectUser(models.Model):
-    project = models.ForeignKey(Task, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Log in/Sign up screen animation</title>
+
+
+
+
+
+</head>
+
+<body>
+<h2>{{ user.username }}</h2>
+<p>{{ position }}</p>
+<ul>
+    {% for project in projects %}
+        <li>{{ project }}</li>
+    {% empty %}
+        <li>No projects found</li>
+    {% endfor %}
+</ul>
+
+
+</body>
+</html>
+
+
+

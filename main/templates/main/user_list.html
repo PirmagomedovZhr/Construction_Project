@@ -1,0 +1,26 @@
+
+
+
+<!DOCTYPE html>
+{% load static %}
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Log in/Sign up screen animation</title>
+
+
+
+
+
+</head>
+
+<body>
+{% for user in users %}
+    <a href="{% url 'user_projects' user.id %}">{{ user.username }}</a>
+{% endfor %}
+
+</body>
+</html>
+
+
+
