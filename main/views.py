@@ -123,9 +123,11 @@ def delete_project(request, project_id):
 
 
 
+def my_projects(request):
+    user = request.user
+    projects = ProjectUser.objects.filter(user=user)
 
-
-
+    return render(request, 'main/my_projects.html', {'projects': projects})
 
 
 

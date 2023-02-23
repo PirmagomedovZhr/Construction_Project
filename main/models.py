@@ -12,6 +12,7 @@ class User(AbstractUser):
     position = models.CharField('Должность', max_length=12, choices=positions, default='')
 
 
+
 class Project(models.Model):
     title = models.CharField('Название', max_length=50)
     task = models.TextField('Описание')
