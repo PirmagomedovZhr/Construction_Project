@@ -37,7 +37,7 @@
       <li>
         {{ project.project.title }}
         <form action="{% url 'delete_project' project.id %}" method="post">
-          {% csrf_token %}
+                  {% csrf_token %}
           <button type="submit">Delete</button>
         </form>
       </li>

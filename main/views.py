@@ -1,22 +1,20 @@
+from datetime import date
+
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from .models import Project
-from .forms import SignUpForm, SignInForm
+from .forms import SignUpForm, SignInForm, TimeSpentForm
 from django.contrib.auth import logout
-from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render
 from django.views import View
-from .models import User, ProjectUser
-
-from django.views.generic.list import ListView
-from .models import ProjectUser
-from django.shortcuts import render, redirect, get_object_or_404
+from .models import User, ProjectUser, TimeSpent
+from django.shortcuts import render, redirect
 
 
 def add_user_to_project(project, user):
     project_user = ProjectUser(project=project, user=user)
     project_user.save()
+
 
 def remove_user_from_project(project, user):
     project_user = ProjectUser.objects.get(project=project, user=user)
@@ -121,13 +119,37 @@ def delete_project(request, project_id):
     return redirect('user_projects', user_id=project.user.id)
 
 
-
+from django.shortcuts import get_object_or_404
 
 def my_projects(request):
     user = request.user
     projects = ProjectUser.objects.filter(user=user)
 
     return render(request, 'main/my_projects.html', {'projects': projects})
+
+
+from django.contrib.auth.decorators import login_required
+
+from django.db.models import Q
+@login_required
+def add_time(request, project_id):
+    project = Project.objects.get(id=project_id)
+    user = request.user
+    existing_entry = TimeSpent.objects.filter(Q(user=user) & Q(project=project) & Q(date=date.today()))
+    if existing_entry.exists():
+        messages.error(request, 'You have already added time for this project today.')
+        return redirect('my_projects')
+    if request.method == 'POST':
+        hours = request.POST['hours']
+        time_spent = TimeSpent(project=project, user=user, hours_spent=hours, date=date.today())
+        time_spent.save()
+        messages.success(request, 'Time added successfully!')
+        return redirect('my_projects')
+    else:
+        context = {'project': project}
+        return render(request, 'main/add_time.html', context)
+
+
 
 
 

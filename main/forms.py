@@ -1,5 +1,11 @@
 from django import forms
 from .models import User
+from .models import TimeSpent
+
+class TimeSpentForm(forms.ModelForm):
+    class Meta:
+        model = TimeSpent
+        fields = ['project', 'date', 'hours_spent']
 
 
 class SignUpForm(forms.Form):

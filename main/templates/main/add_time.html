@@ -1,0 +1,32 @@
+
+
+
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Log in/Sign up screen animation</title>
+
+
+</head>
+
+<body>
+
+  <h1>Add Time to Project "{{ project.title }}"</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label for="hours">Hours:</label>
+    <input type="number" name="hours" id="hours" required min="1">
+    <br><br>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+
+
+
+</html>
+
+
+
