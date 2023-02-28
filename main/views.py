@@ -1,15 +1,15 @@
 from datetime import date
-
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from .models import Project
-from .forms import SignUpForm, SignInForm, TimeSpentForm
+from .forms import SignUpForm, SignInForm
 from django.contrib.auth import logout
 from django.contrib.auth import login, authenticate
 from django.views import View
 from .models import User, ProjectUser, TimeSpent
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 def add_user_to_project(project, user):
     project_user = ProjectUser(project=project, user=user)
@@ -24,64 +24,8 @@ def clear_project_users(project):
     ProjectUser.objects.filter(project=project).delete()
 
 
-
 def get_users_by_position(position):
     return User.objects.filter(position=position)
-
-
-
-
-
-
-def lll(request):
-    users = User.objects.all()
-    data = []
-    for user in users:
-        projects = ProjectUser.objects.filter(user=user).values_list('project__title', flat=True)
-        position = user.get_position_display()
-        data.append({'user': user.username, 'position': position, 'projects': ', '.join(projects)})
-    return render(request, 'main/lll.html', {'data': data})
-
-
-
-def kkk(request):
-    users = User.objects.all()
-    tasks = Project.objects.all()
-
-    if request.method == 'POST':
-        user_id = request.POST.get('user')
-        task_id = request.POST.get('task')
-        user = User.objects.get(id=user_id)
-        task = Project.objects.get(id=task_id)
-        ProjectUser.objects.create(user=user, project=task)
-        return redirect('kkk')
-
-    return render(request, 'main/kkk.html', {'users': users, 'tasks': tasks})
-
-
-
-def jjj(request):
-    # получаем всех пользователей и проекты
-    users = User.objects.all()
-    projects = Project.objects.all()
-
-    # обрабатываем отправленную форму
-    if request.method == 'POST':
-        user_id = request.POST.get('user')
-        project_id = request.POST.get('project')
-
-        # ищем запись ProjectUser по выбранным user_id и project_id
-        project_user = ProjectUser.objects.filter(user=user_id, project=project_id).first()
-
-        # если такая запись есть, удаляем ее
-        if project_user:
-            project_user.delete()
-            return redirect('jjj')
-
-    # если запрос GET, просто отображаем шаблон
-    return render(request, 'main/jjj.html', {'users': users, 'projects': projects})
-
-
 
 
 def user_list(request):
@@ -119,18 +63,7 @@ def delete_project(request, project_id):
     return redirect('user_projects', user_id=project.user.id)
 
 
-from django.shortcuts import get_object_or_404
 
-def my_projects(request):
-    user = request.user
-    projects = ProjectUser.objects.filter(user=user)
-
-    return render(request, 'main/my_projects.html', {'projects': projects})
-
-
-from django.contrib.auth.decorators import login_required
-
-from django.db.models import Q
 @login_required
 def add_time(request, project_id):
     project = Project.objects.get(id=project_id)
@@ -138,20 +71,41 @@ def add_time(request, project_id):
     existing_entry = TimeSpent.objects.filter(Q(user=user) & Q(project=project) & Q(date=date.today()))
     if existing_entry.exists():
         messages.error(request, 'You have already added time for this project today.')
-        return redirect('my_projects')
+        return redirect('base')
     if request.method == 'POST':
         hours = request.POST['hours']
         time_spent = TimeSpent(project=project, user=user, hours_spent=hours, date=date.today())
         time_spent.save()
         messages.success(request, 'Time added successfully!')
-        return redirect('my_projects')
+        return redirect('base')
     else:
         context = {'project': project}
         return render(request, 'main/add_time.html', context)
 
 
 
+def time_spent_list(request):
+    time_spent = TimeSpent.objects.order_by('date')
+    time_spent_dict = {}
 
+    for entry in time_spent:
+        date = entry.date
+        user = entry.user
+        hours_spent = entry.hours_spent
+        if date not in time_spent_dict:
+            time_spent_dict[date] = {}
+        if user not in time_spent_dict[date]:
+            time_spent_dict[date][user] = 0
+        time_spent_dict[date][user] += hours_spent
+
+
+    time_spent_list = []
+    for date, user_hours_dict in time_spent_dict.items():
+        for user, hours in user_hours_dict.items():
+            time_spent_list.append((date, user, hours))
+
+    context = {'time_spent_list': time_spent_list}
+    return render(request, 'main/time_spent_list.html', context)
 
 
 
@@ -198,12 +152,14 @@ def inactive_users(request):
 class SignUpView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            tasks = Project.objects.all()
-            return render(request, 'main/users/base.html', {'tasks': tasks})
+            if request.user.is_superuser:
+
+                return render(request, 'main/users/base.html', {'tasks': Project.objects.all()})
+            else:
+                return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user)})
         else:
-            form = SignUpForm()
             return render(request, 'main/signup.html', context={
-                'form': form,
+                'form': SignUpForm(),
         })
 
 
@@ -220,8 +176,12 @@ class SignUpView(View):
 class SignInView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            tasks = Project.objects.all()
-            return render(request, 'main/users/base.html', {'tasks': tasks})
+            if request.user.is_superuser:
+                tasks = Project.objects.all()
+                return render(request, 'main/users/base.html', {'tasks': tasks})
+            else:
+                return render(request, 'main/users/base.html',
+                              {'projects': ProjectUser.objects.filter(user=request.user)})
         else:
             form = SignInForm()
             return render(request, 'main/signin.html', context={
@@ -249,10 +209,10 @@ def base(request):
     else:
         if request.user.is_superuser:
             template = 'main/admin/base.html'
+            return render(request, template, {'tasks': Project.objects.all()})
         else:
-            template = 'main/users/base.html'
-        tasks = Project.objects.all()
-        return render(request, template, {'tasks':tasks})
+            return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user)})
+
 
 
 def form(request):
@@ -267,8 +227,7 @@ def form(request):
         print(request.method)
         return render(request, 'main/form.html')
     elif request.user.is_authenticated:
-        tasks = Project.objects.all()
-        return render(request, 'main/users/base.html', {'tasks': tasks})
+        return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user)})
     else:
         return HttpResponseRedirect('/signin')
 

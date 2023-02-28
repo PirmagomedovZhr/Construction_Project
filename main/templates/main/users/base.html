@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 {% load static %}
 <html lang="en">
@@ -26,13 +28,15 @@
   </thead>
 
   <tbody>
-    {%for task in tasks%}
-    <tr>
+  {% for project in projects %}
+      <tr>
       <td>{{ forloop.counter }}</td>
-      <th>{{ task.title }}</th>
-      <th>{{ task.task }}</th>
-    </tr>
-  {% endfor %}
+        <th>{{ project.project.title }}</th>
+        <th><a href="{% url 'add_time' project_id=project.project.pk %}">add time</a></th>
+      </tr>
+    {% empty %}
+      <li>No projects found</li>
+    {% endfor %}
   </tbody>
 
 </table>
@@ -41,3 +45,5 @@
 </div>
 </body>
 </html>
+
+

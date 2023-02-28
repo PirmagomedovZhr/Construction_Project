@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Log in/Sign up screen animation</title>
+
+
+
+
+
+</head>
+
+<body>
+    <h1>Time Spent List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Hours Spent</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for date, user, hours_spent in time_spent_list %}
+            <tr>
+                <td>{{ date }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ hours_spent }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+
