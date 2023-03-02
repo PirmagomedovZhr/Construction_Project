@@ -10,6 +10,16 @@ from .models import User, ProjectUser, TimeSpent
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_protect
+
+
+@csrf_protect
+def login(request):
+     context = {}
+     request_context = RequestContext(request)
+     return render_to_response('main/admin/base.html', context,
+                               request_context=request_context)
+
 
 def add_user_to_project(project, user):
     project_user = ProjectUser(project=project, user=user)
