@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (projects, deletes_project, SignInView, SignUpView, logout_user, inactive_users, activate_user, Get_User, base, form, user_list, user_projects, delete_project, add_time, time_spent_list)
+from .views import (project_treports, archive, archive_project, project_reports, projectt_details, projects, deletes_project, SignInView, SignUpView, logout_user, inactive_users, activate_user, Get_User, base, form, user_list, user_projects, delete_project, add_time, time_spent_list)
 
 urlpatterns = [
     path('', base, name='base'),
@@ -17,4 +17,9 @@ urlpatterns = [
     path('timespent/', time_spent_list, name='timespent'),
     path('deletes_project/<int:project_id>/', deletes_project, name='deletes_project'),
     path('projects/', projects, name='projects'),
+    path('projectt/<int:project_id>/', projectt_details, name='projectt_details'),
+    path('project-reports/<int:project_id>/',project_reports, name='project_reports'),
+    path('projectttt/<int:project_id>/archive/', archive_project, name='archive_project'),
+    path('archived_projects/', archive, name='archived_projects'),
+    path('archive/project_reports/<int:project_id>/', project_treports, name='archive_project_reports'),
 ]

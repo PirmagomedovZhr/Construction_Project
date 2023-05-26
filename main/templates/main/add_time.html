@@ -1,32 +1,70 @@
-
-
-
-
 <!DOCTYPE html>
 {% load static %}
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Log in/Sign up screen animation</title>
+  <title>Add Time to Project "{{ project.title }}"</title>
 
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 
 </head>
-
 <body>
-
   <h1>Add Time to Project "{{ project.title }}"</h1>
   <form method="post">
     {% csrf_token %}
     <label for="hours">Hours:</label>
     <input type="number" name="hours" id="hours" required min="1">
     <br><br>
+    <label for="description">Description:</label>
+    <textarea name="description" id="description" required></textarea>
+    <br><br>
     <button type="submit">Submit</button>
   </form>
 </body>
-
-
-
 </html>
-
-
-

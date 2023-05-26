@@ -39,28 +39,34 @@ def user_list(request):
 
 def user_projects(request, user_id):
     user = User.objects.get(id=user_id)
-    projects = ProjectUser.objects.filter(user=user)
+    # Exclude archived projects from the projects assigned to the user
+    projects = ProjectUser.objects.filter(user=user, project__is_archived=False)
     position = user.get_position_display()
-    available_projects = Project.objects.all()
+    # Exclude archived projects from the available projects
+    available_projects = Project.objects.exclude(is_archived=True)
 
     if request.method == 'POST':
         project_id = request.POST.get('project')
         user_id = request.POST.get('user')
-        due_date = request.POST.get('due_date')  # новый код
+        due_date = request.POST.get('due_date')
 
         user = User.objects.get(id=user_id)
         project = Project.objects.get(id=project_id)
 
-        project_user, created = ProjectUser.objects.get_or_create(
-            user=user,
-            project=project,
-            defaults={'due_date': due_date}  # новый код
-        )
-
-        if created:
-            messages.success(request, 'Project has been assigned')
+        # Check if the project is archived before assigning
+        if project.is_archived:
+            messages.error(request, 'This project is archived and cannot be assigned')
         else:
-            messages.info(request, 'This project is already assigned to this user')
+            project_user, created = ProjectUser.objects.get_or_create(
+                user=user,
+                project=project,
+                defaults={'due_date': due_date}
+            )
+
+            if created:
+                messages.success(request, 'Project has been assigned')
+            else:
+                messages.info(request, 'This project is already assigned to this user')
 
     return render(request, 'main/user_projects.html', {
         'user': user,
@@ -109,7 +115,8 @@ def add_time(request, project_id):
         return redirect('base')
     if request.method == 'POST':
         hours = request.POST['hours']
-        time_spent = TimeSpent(project=project, user=user, hours_spent=hours, date=date.today())
+        description = request.POST['description']
+        time_spent = TimeSpent(project=project, user=user, hours_spent=hours, date=date.today(), description=description)
         time_spent.save()
         messages.success(request, 'Time added successfully!')
         return redirect('base')
@@ -119,27 +126,35 @@ def add_time(request, project_id):
 
 
 
+
+
+from django.db.models import Sum
+
+from django.db.models import Window, Sum
+
 def time_spent_list(request):
-    time_spent = TimeSpent.objects.order_by('date')
-    time_spent_dict = {}
+    time_spent_reports = TimeSpent.objects.select_related('user', 'project').annotate(
+        all_hours=Window(
+            expression=Sum('hours_spent'),
+            partition_by=['user', 'project'],
+            order_by=['date']
+        )
+    ).order_by('date')
 
-    for entry in time_spent:
-        date = entry.date
-        user = entry.user
-        hours_spent = entry.hours_spent
-        if date not in time_spent_dict:
-            time_spent_dict[date] = {}
-        if user not in time_spent_dict[date]:
-            time_spent_dict[date][user] = 0
-        time_spent_dict[date][user] += hours_spent
+    # Handle filters
+    user_filter = request.GET.get('user_filter', None)
+    project_filter = request.GET.get('project_filter', None)
 
+    if user_filter:
+        time_spent_reports = time_spent_reports.filter(user__username=user_filter)
 
-    time_spent_list = []
-    for date, user_hours_dict in time_spent_dict.items():
-        for user, hours in user_hours_dict.items():
-            time_spent_list.append((date, user, hours))
+    if project_filter:
+        time_spent_reports = time_spent_reports.filter(project__title=project_filter)
 
-    context = {'time_spent_list': time_spent_list}
+    users = User.objects.all()
+    projects = Project.objects.all()
+
+    context = {'time_spent_reports': time_spent_reports, 'users': users, 'projects': projects}
     return render(request, 'main/time_spent_list.html', context)
 
 
@@ -245,10 +260,9 @@ def base(request):
     else:
         if request.user.is_superuser:
             template = 'main/admin/base.html'
-            return render(request, template, {'tasks': Project.objects.all()})
+            return render(request, template, {'tasks': Project.objects.filter(is_archived=False)})
         else:
-            return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user)})
-
+            return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
 
 @require_POST
 def delete_project(request, projectuser_id):
@@ -281,3 +295,57 @@ def logout_user(request):
     return redirect('signin')
 
 
+def projectt_details(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    user = request.user
+    time_entries = TimeSpent.objects.filter(user=user, project=project)
+
+    context = {
+        'project': project,
+        'time_entries': time_entries,
+    }
+
+    return render(request, 'main/projectt_detail.html', context)
+
+
+def project_reports(request, project_id):
+    reports = TimeSpent.objects.filter(project__id=project_id)
+    return render(request, 'main/project_reports.html', {'reports': reports})
+
+
+def archive_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    project.is_archived = True
+    project.save()
+    return redirect('base')
+
+def archive(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        if request.user.is_superuser:
+            template = 'main/archived_projects.html'
+            return render(request, template, {'tasks': Project.objects.filter(is_archived=True)})
+        else:
+            return render(request, 'main/archived_projects.html', {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=True)})
+
+
+def archived_projects(request):
+    # Get all archived projects
+    tasks = Project.objects.filter(is_archived=True)
+
+    # Render the template with the projects
+    return render(request, 'main/archived_projects.html', {'tasks': tasks})
+
+
+def project_treports(request, project_id):
+    project_reports = TimeSpent.objects.filter(project_id=project_id).select_related('user').annotate(
+        all_hours=Window(
+            expression=Sum('hours_spent'),
+            partition_by=['user'],
+            order_by=['date']
+        )
+    ).order_by('date')
+
+    context = {'project_reports': project_reports}
+    return render(request, 'main/archive_project_reports.html', context)

@@ -29,11 +29,18 @@
 
   <tbody>
     {%for task in tasks%}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <th>{{ task.title }}</th>
-      <th>{{ task.task }}</th>
-    </tr>
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <th><a href="{% url 'project_reports' project_id=task.id %}">{{ task.title }}</a></th>
+    <th>{{ task.task }}</th>
+    <td>
+        <form action="{% url 'archive_project' task.id %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Добавить в архив" />
+        </form>
+    </td>
+</tr>
+
   {% endfor %}
   </tbody>
 
@@ -47,7 +54,8 @@
     <input type="submit" value="Удалить проект" class="glow-button" />
 </form>
 <a href="{% url 'user_list' %}" class="glow-button">Управление проектами</a>
-
+<a href="{% url 'timespent' %}" class="glow-button">Список отчетов</a>
+<a href="{% url 'archived_projects' %}" class="glow-button">Архив</a>
 </div>
 </body>
 </html>

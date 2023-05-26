@@ -16,9 +16,11 @@ class User(AbstractUser):
 class Project(models.Model):
     title = models.CharField('Название', max_length=50)
     task = models.TextField('Описание')
+    is_archived = models.BooleanField('В архиве', default=False)
 
     def __str__(self):
         return self.title
+
 
 
 class ProjectUser(models.Model):
@@ -31,3 +33,4 @@ class TimeSpent(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     date = models.DateField()
     hours_spent = models.IntegerField()
+    description = models.TextField()
