@@ -11,7 +11,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
-
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404, redirect
 
 
 def add_user_to_project(project, user):
@@ -45,10 +46,21 @@ def user_projects(request, user_id):
     if request.method == 'POST':
         project_id = request.POST.get('project')
         user_id = request.POST.get('user')
+        due_date = request.POST.get('due_date')  # новый код
+
         user = User.objects.get(id=user_id)
         project = Project.objects.get(id=project_id)
-        ProjectUser.objects.create(user=user, project=project)
-        messages.success(request, 'Project has been assigned')
+
+        project_user, created = ProjectUser.objects.get_or_create(
+            user=user,
+            project=project,
+            defaults={'due_date': due_date}  # новый код
+        )
+
+        if created:
+            messages.success(request, 'Project has been assigned')
+        else:
+            messages.info(request, 'This project is already assigned to this user')
 
     return render(request, 'main/user_projects.html', {
         'user': user,
@@ -57,18 +69,38 @@ def user_projects(request, user_id):
         'available_projects': available_projects
     })
 
-def delete_project(request, project_id):
-    project = ProjectUser.objects.get(id=project_id)
-    if request.method == 'POST':
-        project.delete()
-        messages.success(request, 'Project has been deleted')
-        return redirect('user_projects', user_id=project.user.id)
-    return redirect('user_projects', user_id=project.user.id)
+
+def projects(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        if request.user.is_superuser:
+            template = 'main/admin/projects.html'
+            return render(request, template, {'projects': Project.objects.all()})
+        else:
+            return HttpResponseRedirect('/signin')  # редирект не авторизованных пользователей на страницу входа
+
+
+def deletes_project(request, project_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/signin')
+    else:
+        if request.user.is_superuser:
+            project = get_object_or_404(Project, id=project_id)
+            project.delete()
+            return redirect('projects')
+        else:
+            return HttpResponseRedirect('/signin')  # редирект не авторизованных пользователей на страницу входа
+
 
 
 
 @login_required
 def add_time(request, project_id):
+    project_user = get_object_or_404(ProjectUser, project_id=project_id, user=request.user)
+    if project_user.due_date < date.today():
+        messages.error(request, 'Due date for this project has passed. You cannot add more time.')
+        return redirect('base')
     project = Project.objects.get(id=project_id)
     user = request.user
     existing_entry = TimeSpent.objects.filter(Q(user=user) & Q(project=project) & Q(date=date.today()))
@@ -207,6 +239,7 @@ class SignInView(View):
 
 
 def base(request):
+
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/signin')
     else:
@@ -215,6 +248,14 @@ def base(request):
             return render(request, template, {'tasks': Project.objects.all()})
         else:
             return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user)})
+
+
+@require_POST
+def delete_project(request, projectuser_id):
+    projectuser = get_object_or_404(ProjectUser, id=projectuser_id)
+    user_id = projectuser.user.id
+    projectuser.delete()
+    return redirect('user_projects', user_id=user_id)
 
 
 

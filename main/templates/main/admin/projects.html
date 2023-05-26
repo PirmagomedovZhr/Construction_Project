@@ -1,0 +1,40 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <!-- ваш код -->
+</head>
+<body>
+<!-- ваш код -->
+<div class="ooo">
+    <table>
+        <thead>
+            <tr>
+                <td>№</td>
+                <th>Наименование</th>
+                <th>Описание</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <th>{{ project.title }}</th>
+                <th>{{ project.task }}</th>
+                <th>
+                    <form method="post" action="{% url 'deletes_project' project.id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="Удалить" class="glow-button" />
+                    </form>
+                </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- ваш код -->
+</body>
+</html>

@@ -24,7 +24,7 @@ class Project(models.Model):
 class ProjectUser(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    due_date = models.DateField('Срок завершения', null=True, blank=True)
 
 class TimeSpent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

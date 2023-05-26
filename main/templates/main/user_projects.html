@@ -1,19 +1,12 @@
-
 <!DOCTYPE html>
 {% load static %}
-<html >
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Log in/Sign up screen animation</title>
-
-
-
-
-
 </head>
-
 <body>
-<h2>{{ user.username }}</h2>
+  <h2>{{ user.username }}</h2>
   <p>{{ position }}</p>
 
   <!-- Форма для добавления проекта -->
@@ -25,6 +18,8 @@
         <option value="{{ project.id }}">{{ project.title }}</option>
       {% endfor %}
     </select>
+    <label for="due-date">Due date:</label>
+    <input type="date" id="due-date" name="due_date">
     <label for="user-select">Select a user:</label>
     <select id="user-select" name="user">
       <option value="{{ user.id }}" selected>{{ user.username }}</option>
@@ -35,20 +30,16 @@
   <ul>
     {% for project in projects %}
       <li>
-        {{ project.project.title }}
-        <form action="{% url 'delete_project' project.id %}" method="post">
-                  {% csrf_token %}
-          <button type="submit">Delete</button>
-        </form>
+        {{ project.project.title }} (due {{ project.due_date }})
+       <form action="{% url 'delete_project' project.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Delete</button>
+</form>
+
       </li>
     {% empty %}
       <li>No projects found</li>
     {% endfor %}
   </ul>
-
-
 </body>
 </html>
-
-
-
