@@ -1,155 +1,39 @@
-* {
-    padding: 0;
-    margin: 0;
-    font-family: sans-serif;
-}
+*,*::after,*::before{-webkit-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0}:root{--dark: #19262E;--light: #f1effa;--side-width: 280px;--side-width-mini: 120px}body{height:100vh;font-family:'Fira Sans', sans-serif;font-size:16px;background-color:var(--light)}.out{position:relative;height:100%}.side{height:100%;position:fixed;top:0;left:0;width:var(--side-width);color:var(--dark);padding-right:20px;-webkit-transition:width .25s linear;transition:width .25s linear;overflow-y:auto;overflow-x:hidden}.side::-webkit-scrollbar{width:5px}.side::-webkit-scrollbar-thumb{background-color:transparent;border-radius:6px}.side:hover::-webkit-scrollbar-thumb{background-color:rgba(25,38,46,0.2)}.side__inner{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;height:100%;background-color:#fff;border-top-right-radius:18px;border-bottom-right-radius:18px;min-height:600px;padding:30px 20px}.side__header{position:relative;margin-bottom:40px}.side__logo{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;width:100%;text-decoration:none;color:inherit;-webkit-transition:all .11s linear;transition:all .11s linear}.side__logo-image{width:60px;height:60px;border-radius:50%;overflow:hidden;border:3px solid var(--light);-ms-flex-negative:0;flex-shrink:0}.side__logo-text{font-size:22px;font-weight:500;margin-left:12px}.side__footer{text-align:center;padding:10px 0;margin:auto 0 0}.side-toggle{display:inline-block;width:40px;height:40px;padding:0;border:0;vertical-align:middle;background-color:transparent;cursor:pointer;position:absolute;top:50%;left:100%;-webkit-transform:translate(-100%, -50%);transform:translate(-100%, -50%);border-radius:12px;-webkit-transition:all .1s linear;transition:all .1s linear}.side-toggle:hover{background-color:var(--light)}.side-toggle svg{width:24px;height:24px;display:inline-block;vertical-align:middle}.nav__list-item{list-style:none;margin-bottom:6px}.nav__list-link{text-decoration:none;color:inherit;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;padding:18px;border-radius:24px;position:relative;-webkit-transition:all .25s linear;transition:all .25s linear}.nav__list-link path{fill:var(--dark);-webkit-transition:all .25s linear;transition:all .25s linear}.nav__list-link:hover,.nav__list-link.active{color:#fff}.nav__list-link:hover path,.nav__list-link.active path{fill:#fff}.nav__list-link:hover::before,.nav__list-link.active::before{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}.nav__list-link:hover::after,.nav__list-link.active::after{opacity:1;-webkit-transform:translate(-20px, -50%);transform:translate(-20px, -50%)}.nav__list-link.active::before{width:calc(100% + 35px)}.nav__list-link.active::after{-webkit-transform:translate(24px, -50%);transform:translate(24px, -50%)}.nav__list-link::before{content:"";display:block;width:100%;height:100%;left:0;top:0;background-color:var(--dark);position:absolute;opacity:0;-webkit-transform:translateX(-20px);transform:translateX(-20px);-webkit-transform-origin:left;transform-origin:left;-webkit-transition:all .15s linear;transition:all .15s linear;border-radius:12px}.nav__list-link::after{content:"";width:18px;height:18px;background-image:url("/home/zhalil/Рабочий стол/Construction_Project/main/static/assets/small-right.svg");background-size:contain;background-repeat:no-repeat;background-position:center;position:absolute;right:0;top:50%;opacity:0;-webkit-transform:translate(-40px, -50%);transform:translate(-40px, -50%);-webkit-transition:all .16s ease-in;transition:all .16s ease-in}.nav__list-link-icon{width:24px;-ms-flex-negative:0;flex-shrink:0;position:relative;z-index:2}.nav__list-link-text{font-size:18px;margin-left:18px;position:relative;-webkit-transition:all .2s linear;transition:all .2s linear;z-index:2}.logout-link{display:-webkit-inline-box;display:-ms-inline-flexbox;display:inline-flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;color:inherit;text-decoration:none;font-size:14px;overflow:hidden;border-radius:12px;padding:18px;-webkit-transition:background-color .1s linear;transition:background-color .1s linear}.logout-link:hover,.logout-link:active{background-color:var(--light)}.logout-link__icon{width:18px;-ms-flex-negative:0;flex-shrink:0}.logout-link__text{color:inherit;margin-left:12px}.side.minify{width:var(--side-width-mini)}.side.minify .side__logo{-webkit-transform:translateX(-40px);transform:translateX(-40px);opacity:0;visibility:hidden}.side.minify .side-toggle{left:50%;-webkit-transform:translate(-50%, -50%);transform:translate(-50%, -50%)}.side.minify .nav__list-link::after{display:none}.side.minify .nav__list-link.active::after{display:block}.side.minify .nav__list-link-text{opacity:0;-webkit-transform:translateX(-60px);transform:translateX(-60px);visibility:hidden;-webkit-transition:all .15s linear;transition:all .15s linear}.side.minify .logout-link{width:54px}.side.minify .logout-link__text{opacity:0;visibility:hidden}.main{position:absolute;right:0;top:0;padding:40px 30px;color:var(--dark);width:calc(100% - var(--side-width));-webkit-transition:width .25s linear;transition:width .25s linear}.main h1{margin-bottom:15px}.main p{margin-bottom:10px;font-size:16px}.main.wide{width:calc(100% - var(--side-width-mini))}
 
-#sitebar {
-    position: fixed;
-    width: 300px;
-    height: 100%;
-    background: #3f3f3f;
-    border-right: 4px solid #E0E5EA;
-}
-.glow-button {
-    transform: translate(1560px,-650px);
-    text-decoration: none;
-    display: inline-block;
-    padding: 15px 30px;
-    margin: 10px 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 40px 40px #3f3f3f inset, 0 0 0 0 #3f3f3f;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: white;
-    transition: .15s ease-in-out;
-
-}
-.ind {
-    transform: translate(600px,60px);
-}
-.glow-button:hover {color: #59e9df}
-
-
-
-
-
-#sitebar ul li:first-child {
-    text-align: center;
-    color: white;
-    font-size: 1.95em;
-    list-style: none;
-    padding: 25px 10px 10px 10px;
-
-}
-
-#sitebar ul li:not(:first-child) {
-    width: 90%;
-    margin-left: 10%;
-    font-size: 1.1em;
-    list-style: none;
-    padding: 15px 10px;
-    transform: translate(0px,400px);
-}
-
-#sitebar ul li a {
-    font-weight: normal;
-    color: #ffffff;
-    text-decoration: none;
-    padding:5px 15px;
-    font-size:25px;
-    background-color: #000000;
-    margin-top:20px;
-}
-
-
-
-
-#sitebar ul li a:hover {color: #59e9df}
-
-table {
-  table-layout: fixed;
-  width: 180%;
-  border-collapse: separate;
-  border: 3px solid #000000;
-    transform: translate(-110px, -100px);
-  background-color: #ffffff;
-}
-.ooo {
-overflow-y: scroll;
-overflow-x: hidden;
-    height: 20%;
+.tasks-table {
     width: 100%;
-    transform: translate(700px,-100px);
-    padding: 120px 120px ;
-}
-tbody tr:nth-child(odd) {
-  background-color: #bebebe;
-
-
+    border-collapse: collapse;
 }
 
-tbody tr:nth-child(even) {
-  background-color: #8c8c8c;
+.tasks-table th,
+.tasks-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-
-td {
-
-  padding: 15px;
+.tasks-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
 }
 
-/*ФОРМА ЗАПОЛНЕНИЯ ПОЛЕЙ ПРИ СОЗДАНИИ ПРОЕКТА*/
-#formcontrol{
-
-    border:none;
-padding:0;
-margin:0;
-font-size:20px;
-color:black;
-background-color:transparent;
-transform: translate(700px, 280px);
-text-align: center;
+.tasks-table tr:hover {
+    background-color: #f5f5f5;
 }
 
-
-
-#regsave form {
-  max-width:400px;
-  padding:80px 0 0 ;
-  border-radius:10px;
-  box-shadow:2px 2px 15px rgba(1, 1, 1, 1);
-  background-color:#fff;
+.tasks-table td form {
+    display: inline;
+    margin: 0;
 }
 
-#regsave form #but {
-
-    border:none;
-    padding:0;
-    margin:0;
-    font-size:20px;
-    transform: translate(0px, -30px);
-    background-color:transparent;
-    text-align: center;
-    font-weight: normal;
-    color: #0c0808;
-
+.tasks-table td form input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
-#regsave form #fname {
-    transform: translate(0px, -40px);
-padding: 10px 40px;
+.tasks-table td form input[type="submit"]:hover {
+    background-color: #0056b3;
 }
-#regsave form #lname {
-    transform: translate(0px, -30px);
-padding: 10px 40px;
-}
-
-#regsave  form #but:hover {color: #275e98
-}
-
-
-
-
-

@@ -5,3 +5,4 @@ venv
 .env
 data.json
 db.sqlite3
+.construction/settings.py
