@@ -74,8 +74,3 @@ text-decoration: none !important;
   margin-top:20px;
 }
 
-@media (max-width: 576px) {
-  .registration-cssave form {
-    padding:50px 20px;
-  }
-}

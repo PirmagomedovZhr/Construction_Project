@@ -39,7 +39,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'construction.urls'
-CSRF_TRUSTED_ORIGINS = ['http://1292087-ca70896.tw1.ru']
+CSRF_TRUSTED_ORIGINS = ['https://1292087-ca70896.tw1.ru']
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
