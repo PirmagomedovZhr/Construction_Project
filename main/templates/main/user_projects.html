@@ -1,45 +1,39 @@
-<!DOCTYPE html>
+{% extends 'main/admin/home.html' %}
 {% load static %}
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Log in/Sign up screen animation</title>
-</head>
-<body>
-  <h2>{{ user.username }}</h2>
-  <p>{{ position }}</p>
+{% block title %}
+{% endblock %}
+{% block content %}
+<main class="main js-main">
+      <form method="post">
+            {% csrf_token %}
+            <label for="project-select">Проект:</label>
+            <select id="project-select" name="project">
+                  {% for project in available_projects %}
+                    <option value="{{ project.id }}">{{ project.title }}</option>
+                  {% endfor %}
+            </select>
+            <label for="due-date">Дата до:</label>
+            <input type="date" id="due-date" name="due_date">
+            <label for="user-select">Пользователь:</label>
+            <select id="user-select" name="user">
+                  <option value="{{ user.id }}" selected>{{ user.username }}</option>
+            </select>
+            <button type="submit">Назначить проект</button>
+      </form>
 
-  <!-- Форма для добавления проекта -->
-  <form method="post">
-    {% csrf_token %}
-    <label for="project-select">Select a project:</label>
-    <select id="project-select" name="project">
-      {% for project in available_projects %}
-        <option value="{{ project.id }}">{{ project.title }}</option>
-      {% endfor %}
-    </select>
-    <label for="due-date">Due date:</label>
-    <input type="date" id="due-date" name="due_date">
-    <label for="user-select">Select a user:</label>
-    <select id="user-select" name="user">
-      <option value="{{ user.id }}" selected>{{ user.username }}</option>
-    </select>
-    <button type="submit">Assign project</button>
-  </form>
+      <ul>
+            {% for project in projects %}
+                  <li>
+                        {{ project.project.title }} (до {{ project.due_date }})
+                        <form action="{% url 'delete_project' project.id %}" method="post">
+                              {% csrf_token %}
+                              <button type="submit">Удалить проект</button>
+                        </form>
 
-  <ul>
-    {% for project in projects %}
-      <li>
-        {{ project.project.title }} (due {{ project.due_date }})
-       <form action="{% url 'delete_project' project.id %}" method="post">
-  {% csrf_token %}
-  <button type="submit">Delete</button>
-</form>
-
-      </li>
-    {% empty %}
-      <li>No projects found</li>
-    {% endfor %}
-  </ul>
-</body>
-</html>
+                  </li>
+                  {% empty %}
+                  <li>Проекты не присвоены</li>
+            {% endfor %}
+      </ul>
+</main>
+{% endblock %}

@@ -1,120 +1,57 @@
-<!DOCTYPE html>
+{% extends 'main/admin/home.html' %}
 {% load static %}
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Time Spent Reports</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        form {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        form label {
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        form select {
-            padding: 5px;
-            border-radius: 4px;
-        }
-
-        form button {
-            padding: 5px 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-    </style>
-</head>
-<body>
-    <h1>Time Spent List</h1>
-
+{% block title %}
+{% endblock %}
+{% block content %}
+<main class="main js-main">
+    <h1>Список отчетов</h1>
     <form method="get">
-        <label for="user_filter">User:</label>
+        <label for="user_filter">Пользователь:</label>
         <select name="user_filter" id="user_filter">
-            <option value="">--Select--</option>
+            <option value="">--Выбрать--</option>
             {% for user in users %}
             <option value="{{ user.username }}">{{ user.username }}</option>
             {% endfor %}
         </select>
 
-        <label for="project_filter">Project:</label>
+        <label for="project_filter">Проект:</label>
         <select name="project_filter" id="project_filter">
-            <option value="">--Select--</option>
+            <option value="">--Выбрать--</option>
             {% for project in projects %}
             <option value="{{ project.title }}">{{ project.title }}</option>
             {% endfor %}
         </select>
 
-        <button type="submit">Filter</button>
+        <button type="submit">Поиск</button>
     </form>
 
-<table>
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>User</th>
-            <th>Project</th>
-            <th>Hours Spent</th>
-            <th>Description</th>
-            <th>All Hours</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in time_spent_reports %}
-        <tr>
-            <td>{{ report.date }}</td>
-            <td>{{ report.user.username }}</td>
-            <td>{{ report.project.title }}</td>
-            <td>{{ report.hours_spent }}</td>
-            <td>{{ report.description }}</td>
-            <td>{{ report.all_hours }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6">No reports found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-
-</body>
-</html>
+    <table>
+        <thead>
+            <tr>
+                <th>Число</th>
+                <th>Пользователь</th>
+                <th>Проект</th>
+                <th>Потраченные часы</th>
+                <th>Описание</th>
+                <th>Общее количество часов</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in time_spent_reports %}
+            <tr>
+                <td>{{ report.date }}</td>
+                <td>{{ report.user.username }}</td>
+                <td>{{ report.project.title }}</td>
+                <td>{{ report.hours_spent }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.all_hours }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

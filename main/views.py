@@ -122,7 +122,7 @@ def add_time(request, project_id):
         return redirect('base')
     else:
         context = {'project': project}
-        return render(request, 'main/add_time.html', context)
+        return render(request, 'main/users/add_time.html', context)
 
 
 
@@ -305,7 +305,7 @@ def projectt_details(request, project_id):
         'time_entries': time_entries,
     }
 
-    return render(request, 'main/projectt_detail.html', context)
+    return render(request, 'main/users/project_detail_for_user.html', context)
 
 
 def project_reports(request, project_id):
@@ -347,5 +347,6 @@ def project_treports(request, project_id):
         )
     ).order_by('date')
 
-    context = {'project_reports': project_reports}
+    context = {'project': get_object_or_404(Project, id=project_id),
+               'project_reports': project_reports}
     return render(request, 'main/archive_project_reports.html', context)

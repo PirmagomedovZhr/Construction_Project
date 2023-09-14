@@ -1,77 +1,16 @@
-<!DOCTYPE html>
+{% extends 'main/admin/home.html' %}
 {% load static %}
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Archived Projects</title>
-        <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        form {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        form label {
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        form select {
-            padding: 5px;
-            border-radius: 4px;
-        }
-
-        form button {
-            padding: 5px 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-    </style>
-</head>
-<body>
-    <h1>Archived Projects List</h1>
-
+{% block title %}
+{% endblock %}
+{% block content %}
+<main class="main js-main">
+    <h1>Архив проектов</h1>
     <table>
         <thead>
             <tr>
-                <th>Number</th>
-                <th>Title</th>
-                <th>Description</th>
+                <th>Номер</th>
+                <th>Название</th>
+                <th>Описание</th>
             </tr>
         </thead>
         <tbody>
@@ -83,10 +22,15 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="3">No archived projects found</td>
+                <td colspan="3">Архив пуст</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+</main>
+{% endblock %}
+
+
+
+
+

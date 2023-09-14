@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
 ]
-CSRF_TRUSTED_ORIGINS = ['http://1292087-ca70896.tw1.ru']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -39,7 +39,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'construction.urls'
-
+CSRF_TRUSTED_ORIGINS = ['http://1292087-ca70896.tw1.ru']
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

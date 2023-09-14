@@ -1,0 +1,18 @@
+{% extends 'main/users/home.html' %}
+{% load static %}
+{% block title %}
+{% endblock %}
+{% block content %}
+    <main class="main js-main">
+            <h1>{{ project.title }}</h1>
+            {% for entry in time_entries %}
+                    <div class="entry">
+                            <h2>{{ entry.date }}</h2>
+                            <p>Количество часов: {{ entry.hours_spent }}</p>
+                            <p>Описание: {{ entry.description }}</p>
+                    </div>
+                    {% empty %}
+                    <p>Отчетов по данному проекту нет"</p>
+            {% endfor %}
+    </main>
+{% endblock %}ц
