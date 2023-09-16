@@ -390,7 +390,3 @@ body {
 .tasks-table td form input[type="submit"]:hover {
     background-color: #0056b3;
 }
-
-.main.js-main {
-    width: 1200px;
-}
