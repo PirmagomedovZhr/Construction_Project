@@ -216,7 +216,7 @@ class SignUpView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             if request.user.is_superuser:
-                return render(request, 'main/users/base.html', {'tasks': Project.objects.all()})
+                return render(request, 'main/admin/base.html', {'tasks': Project.objects.all()})
             else:
                 return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user)})
         else:
