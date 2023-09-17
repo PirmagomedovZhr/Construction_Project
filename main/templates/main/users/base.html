@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
     <main class="main js-main">
-            <table>
+            <table class="tasks-table">
                     <thead>
                         <tr>
                             <th>Номер</th>
@@ -17,14 +17,11 @@
                             {% for project in projects %}
                                     <tr>
                                             <td>{{ forloop.counter }}</td>
-                                            <th><a href="{% url 'projectt_details' project_id=project.project.pk %}">{{ project.project.title }}</a></th>
-                                            <th><a href="{% url 'add_time' project_id=project.project.pk %}">add time</a></th>
+                                            <td><a href="{% url 'projectt_details' project_id=project.project.pk %}">{{ project.project.title }}</a></td>
+                                            <td><a href="{% url 'add_time' project_id=project.project.pk %}">add time</a></td>
                                     </tr>
-                                    {% empty %}
-                                    <li>Ваш список проектов пуст!</li>
                             {% endfor %}
                     </tbody>
-
             </table>
     </main>
 {% endblock %}

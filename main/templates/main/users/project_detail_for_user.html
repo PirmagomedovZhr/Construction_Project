@@ -4,15 +4,29 @@
 {% endblock %}
 {% block content %}
     <main class="main js-main">
-            <h1>{{ project.title }}</h1>
+            <table class="tasks-table">
+        <thead>
+            <tr>
+                <th>Проект</th>
+                <th>Дата</th>
+                <th>Количество часов</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+                    <tbody>
             {% for entry in time_entries %}
-                    <div class="entry">
-                            <h2>{{ entry.date }}</h2>
-                            <p>Количество часов: {{ entry.hours_spent }}</p>
-                            <p>Описание: {{ entry.description }}</p>
-                    </div>
-                    {% empty %}
-                    <p>Отчетов по данному проекту нет"</p>
+            <tr>
+                <td>{{ project.title }}</td>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.hours_spent }}</td>
+                    <td>{{ entry.description }}</td>
+</tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Нет отчетов по выбранному проекту!</td>
+            </tr>
             {% endfor %}
-    </main>
+        </tbody>
+    </table>
+</main>
 {% endblock %}ц

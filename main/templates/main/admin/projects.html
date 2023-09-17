@@ -1,16 +1,12 @@
-<!doctype html>
-{% load static %}
-<html lang="en">
-<head>
-    <!-- ваш код -->
-</head>
-<body>
-<!-- ваш код -->
-<div class="ooo">
-    <table>
+{% extends 'main/admin/home.html' %}
+{% block title %}
+{% endblock %}
+{% block content %}
+    <main class="main js-main">
+            <table class="tasks-table">
         <thead>
             <tr>
-                <td>№</td>
+                <th>№</th>
                 <th>Наименование</th>
                 <th>Описание</th>
                 <th>Действие</th>
@@ -21,20 +17,18 @@
             {% for project in projects %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <th>{{ project.title }}</th>
-                <th>{{ project.task }}</th>
-                <th>
-                    <form method="post" action="{% url 'deletes_project' project.id %}">
+                <td>{{ project.title }}</td>
+                <td>{{ project.task }}</td>
+                <td>
+                    <form method="post" action="{% url 'delete_project_for_user' project.id %}">
                         {% csrf_token %}
                         <input type="submit" value="Удалить" class="glow-button" />
                     </form>
-                </th>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</div>
+ </main>
 
-<!-- ваш код -->
-</body>
-</html>
+{% endblock %}
