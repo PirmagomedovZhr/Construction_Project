@@ -1,6 +1,7 @@
 {% extends 'main/admin/home.html' %}
 {% load static %}
 {% block title %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/users.css' %}" />
 {% endblock %}
 {% block content %}
     <main class="main js-main">
@@ -16,8 +17,8 @@
                 {% for user in users %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <th>{{ user.username }}</th>
-                        <th>{{ user.position }}</th>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.position }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

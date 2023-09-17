@@ -391,3 +391,65 @@ body {
 .tasks-table td form input[type="submit"]:hover {
     background-color: #0056b3;
 }
+
+
+
+
+/* Стили для формы */
+.main.js-main form {
+  margin-bottom: 20px; /* Отступ снизу формы */
+}
+
+/* Стили для меток и полей ввода */
+.main.js-main label {
+  display: block; /* Метки на разных строках */
+  margin-bottom: 10px; /* Отступ снизу меток */
+  font-weight: bold; /* Жирный шрифт для меток */
+}
+
+.main.js-main input[type="date"],
+.main.js-main select {
+  width: 100%; /* Заполнение всей ширины родительского контейнера */
+  padding: 10px; /* Внутренний отступ для полей ввода и выпадающих списков */
+  margin-bottom: 15px; /* Отступ снизу элементов */
+  border: 1px solid #ccc; /* Граничная линия средней серого цвета */
+  border-radius: 5px; /* Закругленные углы */
+}
+
+/* Стили для кнопки */
+.main.js-main button[type="submit"] {
+  background-color: #007bff; /* Цвет фона кнопки */
+  color: #fff; /* Цвет текста кнопки */
+  padding: 10px 20px; /* Внутренний отступ кнопки */
+  border: none; /* Убираем границу кнопки */
+  border-radius: 5px; /* Закругленные углы */
+  cursor: pointer; /* Изменение формы курсора при наведении */
+}
+
+.main.js-main button[type="submit"]:hover {
+  background-color: #0056b3; /* Цвет фона кнопки при наведении */
+}
+
+/* Стили для списка проектов */
+.main.js-main ul {
+  list-style: none; /* Убираем маркеры списка */
+  padding: 0; /* Убираем внутренний отступ списка */
+}
+
+.main.js-main li {
+  margin-bottom: 15px; /* Отступ снизу элементов списка */
+}
+
+/* Стили для формы удаления проекта */
+.main.js-main form[action^="{% url 'delete_project' %}"] {
+  display: inline-block; /* Встраиваем форму удаления в строку */
+}
+
+/* Стили для кнопки удаления проекта */
+.main.js-main form[action^="{% url 'delete_project' %}"] button[type="submit"] {
+  background-color: #dc3545; /* Цвет фона кнопки удаления */
+}
+
+.main.js-main form[action^="{% url 'delete_project' %}"] button[type="submit"]:hover {
+  background-color: #bb2c3b; /* Цвет фона кнопки удаления при наведении */
+}

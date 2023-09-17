@@ -1,6 +1,6 @@
 local_up:
 	docker-compose build
-	docker-compose up -в
+	docker-compose up -d
 
 local_down:
 	docker-compose down

@@ -13,6 +13,10 @@ from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Window, Sum
+from django.contrib.auth.decorators import user_passes_test
+
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
 
 def add_user_to_project(project, user):
     project_user = ProjectUser(project=project, user=user)
@@ -41,6 +45,7 @@ def user_list(request):
     else:
         return HttpResponseRedirect('/signin')
 
+@login_required
 def user_projects(request, user_id):
     if request.user.is_authenticated:
         if request.user.is_superuser:
@@ -73,6 +78,7 @@ def user_projects(request, user_id):
 
             return render(request, 'main/user_projects.html', {
                 'user': user,
+                'admin_user': request.user,
                 'position': position,
                 'projects': projects,
                 'available_projects': available_projects
@@ -335,7 +341,7 @@ def project_reports(request, project_id):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             reports = TimeSpent.objects.filter(project__id=project_id)
-            return render(request, 'main/project_reports.html', {'reports': reports})
+            return render(request, 'main/project_reports.html', {'reports': reports, 'project': get_object_or_404(Project, id=project_id)})
         else:
             return render(request, 'main/users/base.html', {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
     else:

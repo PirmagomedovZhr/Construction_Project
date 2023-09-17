@@ -4,9 +4,9 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     positions = (
-        ('architect', 'архитектор'),
-        ('construction', 'конструктор'),
-        ('designer', 'дизайнер')
+        ('Архитектор', 'архитектор'),
+        ('Конструктор', 'конструктор'),
+        ('Дизайнер', 'дизайнер')
     )
 
     position = models.CharField('Должность', max_length=12, choices=positions, default='')

@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 <main class="main js-main">
-    <table>
+    <table class="tasks-table">
           <thead>
             <tr>
               <th>Номер</th>
@@ -16,13 +16,13 @@
                 {% for user in inactive_users %}
                     <tr>
                       <td>{{ forloop.counter }}</td>
-                      <th>{{ user.first_name }}</th>
-                      <th>
+                      <td>{{ user.first_name }}</td>
+                      <td>
                           <form action="{% url 'activate_user' user.id %}" method="post">
                                 {% csrf_token %}
-                                <input type="submit" value="Активировать">
+                                <input type="submit" value="Активировать" id="but">
                           </form>
-                      </th>
+                      </td>
                     </tr>
                 {% endfor %}
           </tbody>
