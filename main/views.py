@@ -43,7 +43,7 @@ class UserListView(View):
     def get(self, request):
         if request.user.is_authenticated:
             if request.user.is_superuser:
-                users = User.objects.all()
+                users = User.objects.filter(is_active=True)
                 return render(request, self.template_superuser, {'users': users})
             else:
                 projects = ProjectUser.objects.filter(user=request.user, project__is_archived=False)
@@ -52,7 +52,7 @@ class UserListView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class UserProjectsView(View):
     template_superuser = 'main/user_projects.html'
     template_user = 'main/users/base.html'
@@ -103,7 +103,7 @@ class UserProjectsView(View):
         return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ProjectsView(View):
     template_superuser = 'main/admin/projects.html'
     template_user = 'main/users/base.html'
@@ -119,7 +119,7 @@ class ProjectsView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class DeletesProjectView(View):
     redirect_url = '/signin'
 
@@ -133,7 +133,7 @@ class DeletesProjectView(View):
 
 
 
-@method_decorator(login_required, name='dispatch')
+
 class AddTimeView(View):
     template_user = 'main/users/add_time.html'
     redirect_url = '/signin'
@@ -177,7 +177,7 @@ class AddTimeView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class TimeSpentListView(View):
     template_superuser = 'main/time_spent_list.html'
     template_user = 'main/users/base.html'
@@ -203,18 +203,22 @@ class TimeSpentListView(View):
                 if project_filter:
                     time_spent_reports = time_spent_reports.filter(project__title=project_filter)
 
+                # Filter out time spent on archived projects
+                time_spent_reports = time_spent_reports.filter(project__is_archived=False)
+
                 users = User.objects.all()
-                projects = Project.objects.all()
+                projects = Project.objects.filter(is_archived=False)  # Only non-archived projects
 
                 context = {'time_spent_reports': time_spent_reports, 'users': users, 'projects': projects}
                 return render(request, self.template_superuser, context)
             else:
-                return render(request, self.template_user, {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
+                return render(request, self.template_user,
+                              {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
         else:
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class GetUserView(View):
     template_superuser = 'main/admin/users.html'
     template_user = 'main/users/base.html'
@@ -231,11 +235,11 @@ class GetUserView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ActivateUserView(View):
     redirect_url = '/signin'
 
-    def get(self, request, user_id):
+    def post(self, request, user_id):
         if request.user.is_authenticated:
             if request.user.is_superuser:
                 user = User.objects.get(pk=user_id)
@@ -249,7 +253,7 @@ class ActivateUserView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class InactiveUsersView(View):
     template_superuser = 'main/admin/activate.html'
     template_user = 'main/users/base.html'
@@ -285,7 +289,9 @@ class SignUpView(View):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/')
+            return render(request, 'main/signin.html', context={
+                'form': form,
+            })
         return render(request, 'main/signup.html', context={
             'form': form,
         })
@@ -320,11 +326,9 @@ class SignInView(View):
         })
 
 
-@method_decorator(login_required, name='dispatch')
 class BaseView(View):
     template_superuser = 'main/admin/base.html'
     template_user = 'main/users/base.html'
-    redirect_url = '/signin'
 
     def get(self, request):
         if request.user.is_authenticated:
@@ -333,11 +337,11 @@ class BaseView(View):
             else:
                 return render(request, self.template_user, {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
         else:
-            return HttpResponseRedirect(self.redirect_url)
+            return HttpResponseRedirect('/signin')
 
 
 
-@method_decorator(login_required, name='dispatch')
+
 class DeleteProjectView(View):
     redirect_url = '/signin'
 
@@ -354,7 +358,6 @@ class DeleteProjectView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
 class FormView(View):
     template_superuser = 'main/form.html'
     template_user = 'main/users/base.html'
@@ -379,14 +382,14 @@ class FormView(View):
         return render(request, self.template_superuser)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class LogoutUserView(View):
     def get(self, request):
         logout(request)
         return redirect('signin')
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ProjectDetailsView(View):
     template_user = 'main/users/project_detail_for_user.html'
     redirect_url = '/signin'
@@ -412,7 +415,7 @@ class ProjectDetailsView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ProjectReportsView(View):
     template_superuser = 'main/project_reports.html'
     template_user = 'main/users/base.html'
@@ -426,7 +429,7 @@ class ProjectReportsView(View):
             return render(request, self.template_user, {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ArchiveProjectView(View):
     redirect_url = '/signin'
 
@@ -443,7 +446,7 @@ class ArchiveProjectView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ArchiveView(View):
     template_superuser = 'main/archived_projects.html'
     template_user = 'main/users/base.html'
@@ -459,7 +462,7 @@ class ArchiveView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
-@method_decorator(login_required, name='dispatch')
+
 class ProjectTReportsView(View):
     template_superuser = 'main/archive_project_reports.html'
     template_user = 'main/users/base.html'
@@ -483,3 +486,6 @@ class ProjectTReportsView(View):
                 return render(request, self.template_user, {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
         else:
             return HttpResponseRedirect(self.redirect_url)
+
+
+

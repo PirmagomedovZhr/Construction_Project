@@ -1,6 +1,6 @@
 local_up:
 	docker-compose build
-	docker-compose up -d
+	docker-compose up
 
 local_down:
 	docker-compose down
@@ -17,3 +17,5 @@ migrate:
 createsuperuser:
 	docker-compose run --rm web sh -c "python manage.py createsuperuser"
 
+dbshell:
+	docker-compose exec db psql -U postgres -d postgres

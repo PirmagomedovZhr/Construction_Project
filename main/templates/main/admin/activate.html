@@ -8,6 +8,7 @@
           <thead>
             <tr>
               <th>Номер</th>
+              <th>Имя</th>
               <th>Фамилия</th>
               <th>Действие</th>
             </tr>
@@ -17,6 +18,7 @@
                     <tr>
                       <td>{{ forloop.counter }}</td>
                       <td>{{ user.first_name }}</td>
+                      <td>{{ user.last_name }}</td>
                       <td>
                           <form action="{% url 'activate_user' user.id %}" method="post">
                                 {% csrf_token %}
