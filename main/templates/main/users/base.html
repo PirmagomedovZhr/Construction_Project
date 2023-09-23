@@ -9,7 +9,8 @@
                         <tr>
                             <th>Номер</th>
                             <th>Наименование</th>
-                            <th>Описание</th>
+                            <th>Действие
+                            </th>
                         </tr>
                     </thead>
 
@@ -18,7 +19,7 @@
                                     <tr>
                                             <td>{{ forloop.counter }}</td>
                                             <td><a href="{% url 'projectt_details' project_id=project.project.pk %}">{{ project.project.title }}</a></td>
-                                            <td><a href="{% url 'add_time' project_id=project.project.pk %}">add time</a></td>
+                                            <td><a href="{% url 'add_time' project_id=project.project.pk %}">Создать отчет</a></td>
                                     </tr>
                             {% endfor %}
                     </tbody>

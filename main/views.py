@@ -15,6 +15,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Window, Sum
 from django.utils.decorators import method_decorator
 
+def set_active_page(request):
+    active_page = request.path_info  # Get the current URL path
+    return {'active_page': active_page}
+
 def is_admin(user):
     return user.is_authenticated and user.is_superuser
 
