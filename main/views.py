@@ -1,22 +1,21 @@
 from datetime import date
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from .models import Project
 from .forms import SignUpForm, SignInForm
 from django.contrib.auth import logout
 from django.contrib.auth import login, authenticate
 from django.views import View
 from .models import User, ProjectUser, TimeSpent
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.db.models import Window, Sum
-from django.utils.decorators import method_decorator
+from django.shortcuts import render, get_object_or_404
+from .models import Project
+from django.views.generic.edit import CreateView
+from .models import ProjectFile
 
 def set_active_page(request):
-    active_page = request.path_info  # Get the current URL path
+    active_page = request.path_info
     return {'active_page': active_page}
 
 def is_admin(user):
@@ -492,4 +491,48 @@ class ProjectTReportsView(View):
             return HttpResponseRedirect(self.redirect_url)
 
 
+class ProjectFileCreateView(CreateView):
+    model = ProjectFile
+    fields = ['project', 'file', 'description']
+    template_name = 'main/project_file_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+
+
+def project_files(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    files = ProjectFile.objects.filter(project=project)
+    return render(request, 'main/project_files.html', {'project': project, 'files': files})
+
+
+def project_files_admin(request, project_id):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            project = get_object_or_404(Project, id=project_id)
+            files = ProjectFile.objects.filter(project=project)
+            return render(request, 'main/admin/project_files.html', {'project': project, 'files': files})
+        else:
+            return render(request, 'main/users/base.html',
+                          {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
+
+    else:
+        return HttpResponseRedirect('/signin')
+
+
+class Project_files_for_admin(View):
+    template_superuser = 'main/admin/project_files_for_admin.html'
+    template_user = 'main/users/base.html'
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            if request.user.is_superuser:
+                tasks = Project.objects.filter(is_archived=False)
+                return render(request, self.template_superuser, {'tasks': tasks})
+
+            else:
+                return render(request, self.template_user, {'projects': ProjectUser.objects.filter(user=request.user, project__is_archived=False)})
+        else:
+            return HttpResponseRedirect('/signin')
 

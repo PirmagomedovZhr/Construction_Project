@@ -9,19 +9,23 @@
                         <tr>
                             <th>Номер</th>
                             <th>Наименование</th>
-                            <th>Действие
-                            </th>
+                            <th>Действие</th>
+                            <th>Вложения</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                            {% for project in projects %}
-                                    <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td><a href="{% url 'projectt_details' project_id=project.project.pk %}">{{ project.project.title }}</a></td>
-                                            <td><a href="{% url 'add_time' project_id=project.project.pk %}">Создать отчет</a></td>
-                                    </tr>
-                            {% endfor %}
+{% for project in projects %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="{% url 'projectt_details' project_id=project.project.pk %}">{{ project.project.title }}</a></td>
+        <td>
+            <a href="{% url 'add_time' project_id=project.project.pk %}">Создать отчет</a>
+        </td>
+        <td><a href="{% url 'project-files' project_id=project.project.pk %}">Файлы</a></td>
+    </tr>
+{% endfor %}
+
                     </tbody>
             </table>
     </main>

@@ -1,6 +1,10 @@
 from django.urls import path
-from .views import (UserListView, UserProjectsView, ProjectsView, DeletesProjectView, TimeSpentListView, AddTimeView, GetUserView, ActivateUserView, InactiveUsersView,
-                    LogoutUserView, ProjectDetailsView, FormView, DeleteProjectView, BaseView, ProjectReportsView, ArchiveProjectView, ArchiveView, ProjectTReportsView, SignInView, SignUpView)
+from .views import (UserListView, UserProjectsView, ProjectsView, DeletesProjectView,
+                    TimeSpentListView, AddTimeView, GetUserView, ActivateUserView, InactiveUsersView,
+                    LogoutUserView, ProjectDetailsView, FormView, DeleteProjectView,
+                    BaseView, ProjectReportsView, ArchiveProjectView, ArchiveView,
+                    ProjectTReportsView, SignInView, SignUpView, ProjectFileCreateView, project_files,
+                    Project_files_for_admin, project_files_admin)
 
 urlpatterns = [
     path('', BaseView.as_view(), name='base'),#Главная
@@ -23,4 +27,8 @@ urlpatterns = [
     path('projectttt/<int:project_id>/archive/', ArchiveProjectView.as_view(), name='archive_project'),
     path('archived_projects/', ArchiveView.as_view(), name='archived_projects'),#Архив проектов
     path('archive/project_reports/<int:project_id>/', ProjectTReportsView.as_view(), name='archive_project_reports'),
+    path('project/<int:pk>/add_file/', ProjectFileCreateView.as_view(), name='project-add-file'),
+    path('project/<int:project_id>/files/', project_files, name='project-files'),
+    path('project/<int:project_id>/files_admin/', project_files_admin, name='project-files_admin'),
+    path('project_files_for_admin/', Project_files_for_admin.as_view(), name='project_files_for_admin'),
 ]

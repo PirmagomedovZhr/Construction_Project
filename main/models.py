@@ -34,3 +34,13 @@ class TimeSpent(models.Model):
     date = models.DateField()
     hours_spent = models.IntegerField()
     description = models.TextField()
+
+
+class ProjectFile(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='files')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    file = models.FileField(upload_to='project_files/')
+    description = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"{self.project.title} - {self.file.name}"

@@ -1,0 +1,17 @@
+{% extends 'main/admin/home.html' %}
+{% load static %}
+{% block title %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/form.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/time_spent.css' %}" />
+{% endblock %}
+{% block content %}
+    <main class="main js-main">
+        <div id="formcontrol">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" id="but">Загрузить</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

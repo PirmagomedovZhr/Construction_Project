@@ -1,0 +1,29 @@
+{% extends 'main/users/home.html' %}
+{% load static %}
+{% block title %}Файлы проекта{% endblock %}
+{% block content %}
+    <main class="main js-main">
+        <h1>Файлы проекта: {{ project.title }}</h1>
+        <br>
+        <table class="tasks-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название файла</th>
+                    <th>Дата загрузки</th>
+                    <th>Скачать</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ file.description }}</td>
+                        <td>{{ file.uploaded_at }}</td>
+                        <td><a href="{{ file.file.url }}" download>Скачать</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+{% endblock %}
